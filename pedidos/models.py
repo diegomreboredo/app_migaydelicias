@@ -44,6 +44,10 @@ class Pedido(models.Model):
         decimal_places=2,
         default=0
     )
+    
+    stock_descontado = models.BooleanField(
+    default=False
+    )
 
     creado = models.DateTimeField(
         auto_now_add=True
@@ -77,8 +81,37 @@ class Pedido(models.Model):
           estado_anterior = Pedido.objects.get(pk=self.pk).estado
   
       super().save(*args, **kwargs)
-        
+  
+      if (
+        not es_nuevo
+        and estado_anterior != "entregado"
+        and self.estado == "entregado"
+        and not self.stock_descontado
+    ):
+        for detalle in self.detalles.all():
+            print(
+                detalle.producto.nombre,
+                detalle.cantidad
+            )
+    
+    def descontar_stock(self):
 
+      if self.stock_descontado:
+          return
+  
+      for detalle in self.detalles.all():
+
+        producto = detalle.producto
+    
+        producto.stock -= detalle.cantidad
+    
+        producto.save()
+        
+      self.stock_descontado = True
+
+      self.save(
+          update_fields=["stock_descontado"]
+      )
 class DetallePedido(models.Model):
 
     pedido = models.ForeignKey(
