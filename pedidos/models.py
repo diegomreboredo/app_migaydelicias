@@ -83,16 +83,12 @@ class Pedido(models.Model):
       super().save(*args, **kwargs)
   
       if (
-        not es_nuevo
-        and estado_anterior != "entregado"
-        and self.estado == "entregado"
-        and not self.stock_descontado
-    ):
-        for detalle in self.detalles.all():
-            print(
-                detalle.producto.nombre,
-                detalle.cantidad
-            )
+          not es_nuevo
+          and estado_anterior != "entregado"
+          and self.estado == "entregado"
+          and not self.stock_descontado
+      ):
+          self.descontar_stock()
     
     def descontar_stock(self):
 
