@@ -2,6 +2,8 @@ from django.db import models
 
 from empresas.models import Empresa
 from proveedores.models import Proveedor
+from inventario.models import MovimientoInventario
+from django.core.exceptions import ValidationError
 
 
 class Compra(models.Model):
@@ -65,6 +67,14 @@ class Compra(models.Model):
             f"{self.proveedor.nombre}"
         )
         
+    def clean(self):
+
+      if self.proveedor.empresa != self.empresa:
+  
+          raise ValidationError(
+              "El proveedor pertenece a otra empresa."
+          )
+        
     def save(self, *args, **kwargs):
 
       es_nueva = self.pk is None
@@ -75,7 +85,8 @@ class Compra(models.Model):
           estado_anterior = Compra.objects.get(
               pk=self.pk
           ).estado
-  
+          
+      self.full_clean()
       super().save(*args, **kwargs)
   
       if (
@@ -91,14 +102,22 @@ class Compra(models.Model):
       if self.stock_ingresado:
           return
   
-      print("=== INGRESANDO STOCK ===")
-  
       for detalle in self.detalles.all():
   
-          print(
-              detalle.producto.nombre,
-              detalle.cantidad
+          MovimientoInventario.objects.create(
+              empresa=self.empresa,
+              producto=detalle.producto,
+              tipo="compra",
+              cantidad=detalle.cantidad,
+              motivo="Ingreso por compra",
+              referencia=f"Compra #{self.id}",
           )
+  
+      self.stock_ingresado = True
+  
+      self.save(
+          update_fields=["stock_ingresado"]
+      )
         
 from productos.models import Producto
 
