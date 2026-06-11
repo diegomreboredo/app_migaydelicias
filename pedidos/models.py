@@ -4,6 +4,7 @@ from empresas.models import Empresa
 from clientes.models import Cliente
 from productos.models import Producto
 from django.db.models import Sum
+from inventario.models import MovimientoInventario
 
 
 class Pedido(models.Model):
@@ -96,15 +97,18 @@ class Pedido(models.Model):
           return
   
       for detalle in self.detalles.all():
-
-        producto = detalle.producto
-    
-        producto.stock -= detalle.cantidad
-    
-        producto.save()
-        
+  
+          MovimientoInventario.objects.create(
+              empresa=self.empresa,
+              producto=detalle.producto,
+              tipo="venta",
+              cantidad=detalle.cantidad,
+              motivo="Salida por venta",
+              referencia=f"Pedido #{self.id}",
+          )
+  
       self.stock_descontado = True
-
+  
       self.save(
           update_fields=["stock_descontado"]
       )
