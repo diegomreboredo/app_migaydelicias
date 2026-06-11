@@ -30,3 +30,21 @@ class MovimientoInventarioAdmin(admin.ModelAdmin):
     ordering = (
         "-creado",
     )
+    
+    def get_readonly_fields(self, request, obj=None):
+
+      if obj:
+          return (
+              "empresa",
+              "producto",
+              "tipo",
+              "cantidad",
+              "motivo",
+              "referencia",
+              "creado",
+          )
+  
+      return ()
+    
+    def has_delete_permission(self, request, obj=None):
+      return False
