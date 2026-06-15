@@ -51,6 +51,34 @@ class PedidoAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
       request._pedido_obj = obj
       return super().get_form(request, obj, **kwargs)
+      
+    def has_delete_permission(self, request, obj=None):
+
+        if obj and obj.estado == "entregado":
+            return False
+    
+        return super().has_delete_permission(
+            request,
+            obj
+        )
+        
+    def get_readonly_fields(
+      self,
+      request,
+      obj=None
+  ):
+  
+      if obj and obj.estado == "entregado":
+  
+          return (
+              "empresa",
+              "cliente",
+              "estado",
+              "observaciones",
+              "total",
+          )
+  
+      return ()
 
     inlines = [
         DetallePedidoInline

@@ -1,4 +1,5 @@
 from django.db import models
+from caja.models import MovimientoCaja
 
 from empresas.models import Empresa
 from proveedores.models import Proveedor
@@ -99,25 +100,37 @@ class Compra(models.Model):
       
     def ingresar_stock(self):
 
-      if self.stock_ingresado:
-          return
-  
-      for detalle in self.detalles.all():
-  
-          MovimientoInventario.objects.create(
-              empresa=self.empresa,
-              producto=detalle.producto,
-              tipo="compra",
-              cantidad=detalle.cantidad,
-              motivo="Ingreso por compra",
-              referencia=f"Compra #{self.id}",
-          )
-  
-      self.stock_ingresado = True
-  
-      self.save(
-          update_fields=["stock_ingresado"]
-      )
+        if self.stock_ingresado:
+            return
+    
+        for detalle in self.detalles.all():
+    
+            MovimientoInventario.objects.create(
+                empresa=self.empresa,
+                producto=detalle.producto,
+                tipo="compra",
+                cantidad=detalle.cantidad,
+                motivo="Ingreso por compra",
+                referencia=f"Compra #{self.id}",
+            )
+    
+        MovimientoCaja.objects.create(
+            empresa=self.empresa,
+            tipo="egreso",
+            concepto="Compra de mercadería",
+            referencia=f"Compra #{self.id}",
+            monto=self.total,
+            observaciones=(
+                f"Proveedor: "
+                f"{self.proveedor.nombre}"
+            )
+        )
+    
+        self.stock_ingresado = True
+    
+        self.save(
+            update_fields=["stock_ingresado"]
+        )
         
 from productos.models import Producto
 

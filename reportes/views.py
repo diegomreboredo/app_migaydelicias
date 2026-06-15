@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
 
-def inicio(request):
+def dashboard(request):
     return render(
         request,
-        "dashboard/inicio.html"
+        "reportes/dashboard.html"
     )

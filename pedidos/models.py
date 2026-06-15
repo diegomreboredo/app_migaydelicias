@@ -5,6 +5,7 @@ from clientes.models import Cliente
 from productos.models import Producto
 from django.db.models import Sum
 from inventario.models import MovimientoInventario
+from caja.models import MovimientoCaja
 
 
 class Pedido(models.Model):
@@ -49,6 +50,10 @@ class Pedido(models.Model):
     stock_descontado = models.BooleanField(
     default=False
     )
+    
+    caja_registrada = models.BooleanField(
+        default=False
+    )
 
     creado = models.DateTimeField(
         auto_now_add=True
@@ -74,22 +79,26 @@ class Pedido(models.Model):
           f"{self.cliente.nombre}"
       )
       
-    def save(self, *args, **kwargs):
-      es_nuevo = self.pk is None
-  
-      estado_anterior = None
-      if not es_nuevo:
-          estado_anterior = Pedido.objects.get(pk=self.pk).estado
-  
-      super().save(*args, **kwargs)
-  
-      if (
-          not es_nuevo
-          and estado_anterior != "entregado"
-          and self.estado == "entregado"
-          and not self.stock_descontado
-      ):
-          self.descontar_stock()
+      def save(self, *args, **kwargs):
+      
+          es_nuevo = self.pk is None
+      
+          estado_anterior = None
+      
+          if not es_nuevo:
+              estado_anterior = Pedido.objects.get(
+                  pk=self.pk
+              ).estado
+      
+          super().save(*args, **kwargs)
+      
+          if (
+              not es_nuevo
+              and estado_anterior != "entregado"
+              and self.estado == "entregado"
+              and not self.stock_descontado
+          ):
+              self.descontar_stock()
     
     def descontar_stock(self):
 
@@ -112,6 +121,29 @@ class Pedido(models.Model):
       self.save(
           update_fields=["stock_descontado"]
       )
+      
+      self.registrar_ingreso_caja()
+    
+    def registrar_ingreso_caja(self):
+
+        if self.caja_registrada:
+            return
+    
+        MovimientoCaja.objects.create(
+          empresa=self.empresa,
+          tipo="ingreso",
+          concepto="Venta de productos",
+          referencia=f"Pedido #{self.id}",
+          monto=self.total,
+          observaciones=f"Cliente: {self.cliente.nombre}"
+      )
+    
+        self.caja_registrada = True
+    
+        self.save(
+            update_fields=["caja_registrada"]
+        )
+        
 class DetallePedido(models.Model):
 
     pedido = models.ForeignKey(
