@@ -134,3 +134,29 @@ body {
 
     color: var(--erp-text-muted);
 }
+
+.pedido-card {
+
+    border-left: 4px solid #0d6efd;
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 14px;
+
+    margin-top: 12px;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+
+    min-height: 100px;
+
+    transition: .2s;
+
+}
+
+.pedido-card:hover {
+
+    transform: translateY(-2px);
+
+}

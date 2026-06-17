@@ -6,174 +6,301 @@ Pedidos
 
 {% block content %}
 
-<h2 class="fw-bold mb-4">Pedidos
+<!-- MÉTRICAS -->
 
-</h2><div class="row g-4"><div class="col-lg-3">
+<div class="row g-3 mb-4">
+  
 
-    <div class="card p-3">
+    <div class="col-lg-3 col-md-6">
 
-        <h5 class="text-primary">
+        <div class="card border-0 shadow-sm p-3">
+            <small class="text-muted">Pedidos hoy</small>
+            <h3 class="fw-bold mb-0">
+                {{ pedidos_hoy }}
+            </h3>
+        </div>
 
-            Pendientes
+    </div>
 
-        </h5>
+    <div class="col-lg-3 col-md-6">
 
-        {% for pedido in pendientes %}
+        <div class="card border-0 shadow-sm p-3">
+            <small class="text-muted">Pendientes</small>
+            <h3 class="fw-bold text-danger mb-0">
+                {{ pendientes_total }}
+            </h3>
+        </div>
 
-            <div class="card mt-2 p-2">
+    </div>
 
-                <strong>
-                    Pedido #{{ pedido.id }}
-                </strong>
+    <div class="col-lg-3 col-md-6">
 
-                {{ pedido.cliente.nombre }}
+        <div class="card border-0 shadow-sm p-3">
+            <small class="text-muted">En preparación</small>
+            <h3 class="fw-bold text-warning mb-0">
+                {{ preparacion_total }}
+            </h3>
+        </div>
 
-                <small class="text-muted">
+    </div>
 
-                    ${{ pedido.total }}
+    <div class="col-lg-3 col-md-6">
 
-                </small>
-
-            </div>
-
-        {% empty %}
-
-            <p class="text-muted">
-
-                Sin pedidos
-
-            </p>
-
-        {% endfor %}
+        <div class="card border-0 shadow-sm p-3">
+            <small class="text-muted">Facturación</small>
+            <h3 class="fw-bold text-success mb-0">
+                ${{ facturacion_total }}
+            </h3>
+        </div>
 
     </div>
 
 </div>
 
-<div class="col-lg-3">
+<!-- TÍTULO -->
 
-    <div class="card p-3">
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-        <h5 class="text-warning">
+    <div>
+        <h2 class="fw-bold mb-0">
+            Pedidos
+        </h2>
 
-            En preparación
+        <small class="text-muted">
+            Gestión de pedidos de {{ empresa.nombre }}
+        </small>
+    </div>
 
-        </h5>
+</div>
 
-        {% for pedido in preparacion %}
+<!-- KANBAN -->
 
-            <div class="card mt-2 p-2">
+<div class="row g-4">
+
+    <!-- PENDIENTES -->
+
+    <div class="col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-header bg-danger-subtle">
 
                 <strong>
-                    Pedido #{{ pedido.id }}
+                    Pendientes ({{ pendientes_total }})
                 </strong>
-
-                {{ pedido.cliente.nombre }}
-
-                <small class="text-muted">
-
-                    ${{ pedido.total }}
-
-                </small>
 
             </div>
 
-        {% empty %}
+            <div class="card-body">
 
-            <p class="text-muted">
+                {% for pedido in pendientes %}
 
-                Sin pedidos
+                    <div class="card mb-3 shadow-sm border-start border-danger border-4">
 
-            </p>
+                        <div class="card-body">
 
-        {% endfor %}
+                            <div class="fw-bold">
+                                Pedido #{{ pedido.id }}
+                            </div>
+
+                            <div>
+                                {{ pedido.cliente.nombre }}
+                            </div>
+
+                            <div class="text-success fw-semibold">
+                                ${{ pedido.total }}
+                            </div>
+
+                            <small class="text-muted">
+                                {{ pedido.creado|date:"d/m/Y H:i" }}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <p class="text-muted">
+                        Sin pedidos
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- PREPARACION -->
+
+    <div class="col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-header bg-warning-subtle">
+
+                <strong>
+                    En preparación ({{ preparacion_total }})
+                </strong>
+
+            </div>
+
+            <div class="card-body">
+
+                {% for pedido in preparacion %}
+
+                    <div class="card mb-3 shadow-sm border-start border-warning border-4">
+
+                        <div class="card-body">
+
+                            <div class="fw-bold">
+                                Pedido #{{ pedido.id }}
+                            </div>
+
+                            <div>
+                                {{ pedido.cliente.nombre }}
+                            </div>
+
+                            <div class="text-success fw-semibold">
+                                ${{ pedido.total }}
+                            </div>
+
+                            <small class="text-muted">
+                                {{ pedido.creado|date:"d/m/Y H:i" }}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <p class="text-muted">
+                        Sin pedidos
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- LISTOS -->
+
+    <div class="col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-header bg-success-subtle">
+
+                <strong>
+                    Listos ({{ listos_total }})
+                </strong>
+
+            </div>
+
+            <div class="card-body">
+
+                {% for pedido in listos %}
+
+                    <div class="card mb-3 shadow-sm border-start border-success border-4">
+
+                        <div class="card-body">
+
+                            <div class="fw-bold">
+                                Pedido #{{ pedido.id }}
+                            </div>
+
+                            <div>
+                                {{ pedido.cliente.nombre }}
+                            </div>
+
+                            <div class="text-success fw-semibold">
+                                ${{ pedido.total }}
+                            </div>
+
+                            <small class="text-muted">
+                                {{ pedido.creado|date:"d/m/Y H:i" }}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <p class="text-muted">
+                        Sin pedidos
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ENTREGADOS -->
+
+    <div class="col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-header bg-secondary-subtle">
+
+                <strong>
+                    Entregados ({{ entregados|length }})
+                </strong>
+
+            </div>
+
+            <div class="card-body">
+
+                {% for pedido in entregados %}
+
+                    <div class="card mb-3 shadow-sm border-start border-secondary border-4">
+
+                        <div class="card-body">
+
+                            <div class="fw-bold">
+                                Pedido #{{ pedido.id }}
+                            </div>
+
+                            <div>
+                                {{ pedido.cliente.nombre }}
+                            </div>
+
+                            <div class="text-success fw-semibold">
+                                ${{ pedido.total }}
+                            </div>
+
+                            <small class="text-muted">
+                                {{ pedido.creado|date:"d/m/Y H:i" }}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <p class="text-muted">
+                        Sin pedidos
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
-<div class="col-lg-3">
-
-    <div class="card p-3">
-
-        <h5 class="text-success">
-
-            Listos
-
-        </h5>
-
-        {% for pedido in listos %}
-
-            <div class="card mt-2 p-2">
-
-                <strong>
-                    Pedido #{{ pedido.id }}
-                </strong>
-
-                {{ pedido.cliente.nombre }}
-
-                <small class="text-muted">
-
-                    ${{ pedido.total }}
-
-                </small>
-
-            </div>
-
-        {% empty %}
-
-            <p class="text-muted">
-
-                Sin pedidos
-
-            </p>
-
-        {% endfor %}
-
-    </div>
-
-</div>
-
-<div class="col-lg-3">
-
-    <div class="card p-3">
-
-        <h5 class="text-secondary">
-
-            Entregados
-
-        </h5>
-
-        {% for pedido in entregados %}
-
-            <div class="card mt-2 p-2">
-
-                <strong>
-                    Pedido #{{ pedido.id }}
-                </strong>
-
-                {{ pedido.cliente.nombre }}
-
-                <small class="text-muted">
-
-                    ${{ pedido.total }}
-
-                </small>
-
-            </div>
-
-        {% empty %}
-
-            <p class="text-muted">
-
-                Sin pedidos
-
-            </p>
-
-        {% endfor %}
-
-    </div>
-
-</div>
-
-</div>{% endblock %}
+{% endblock %}
