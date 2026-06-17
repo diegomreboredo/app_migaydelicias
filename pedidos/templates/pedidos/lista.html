@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}
+Pedidos
+{% endblock %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-4">Pedidos
+
+</h2><div class="row g-4"><div class="col-lg-3">
+
+    <div class="card p-3">
+
+        <h5 class="text-primary">
+
+            Pendientes
+
+        </h5>
+
+        {% for pedido in pendientes %}
+
+            <div class="card mt-2 p-2">
+
+                <strong>
+                    Pedido #{{ pedido.id }}
+                </strong>
+
+                {{ pedido.cliente.nombre }}
+
+                <small class="text-muted">
+
+                    ${{ pedido.total }}
+
+                </small>
+
+            </div>
+
+        {% empty %}
+
+            <p class="text-muted">
+
+                Sin pedidos
+
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<div class="col-lg-3">
+
+    <div class="card p-3">
+
+        <h5 class="text-warning">
+
+            En preparación
+
+        </h5>
+
+        {% for pedido in preparacion %}
+
+            <div class="card mt-2 p-2">
+
+                <strong>
+                    Pedido #{{ pedido.id }}
+                </strong>
+
+                {{ pedido.cliente.nombre }}
+
+                <small class="text-muted">
+
+                    ${{ pedido.total }}
+
+                </small>
+
+            </div>
+
+        {% empty %}
+
+            <p class="text-muted">
+
+                Sin pedidos
+
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<div class="col-lg-3">
+
+    <div class="card p-3">
+
+        <h5 class="text-success">
+
+            Listos
+
+        </h5>
+
+        {% for pedido in listos %}
+
+            <div class="card mt-2 p-2">
+
+                <strong>
+                    Pedido #{{ pedido.id }}
+                </strong>
+
+                {{ pedido.cliente.nombre }}
+
+                <small class="text-muted">
+
+                    ${{ pedido.total }}
+
+                </small>
+
+            </div>
+
+        {% empty %}
+
+            <p class="text-muted">
+
+                Sin pedidos
+
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<div class="col-lg-3">
+
+    <div class="card p-3">
+
+        <h5 class="text-secondary">
+
+            Entregados
+
+        </h5>
+
+        {% for pedido in entregados %}
+
+            <div class="card mt-2 p-2">
+
+                <strong>
+                    Pedido #{{ pedido.id }}
+                </strong>
+
+                {{ pedido.cliente.nombre }}
+
+                <small class="text-muted">
+
+                    ${{ pedido.total }}
+
+                </small>
+
+            </div>
+
+        {% empty %}
+
+            <p class="text-muted">
+
+                Sin pedidos
+
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</div>{% endblock %}

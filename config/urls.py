@@ -12,6 +12,10 @@ urlpatterns = [
     "login/",
     include("usuarios.urls")
 ),
+path(
+    "pedidos/",
+    include("pedidos.urls")
+),
 ]
 
 
