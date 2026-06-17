@@ -9,94 +9,133 @@ Dashboard
 <div class="container-fluid">
 
     <div class="mb-4">
-        <h2>Dashboard</h2>
+        <h2 class="fw-bold">
+            Dashboard
+        </h2>
+
         <p class="text-muted">
             Bienvenido al ERP Platform
         </p>
     </div>
 
+    <!-- Tarjetas -->
+
     <div class="row g-4">
 
-        <div class="col-md-3">
-            <div class="card p-3">
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow-sm border-0 p-3">
+
                 <h6 class="text-secondary">
-                    Ventas del día
+                    💰 Ventas del día
                 </h6>
 
-                <h3>
-                    $0
-                </h3>
+                <h2 class="fw-bold text-success">
+                    ${{ total_ventas }}
+                </h2>
+
             </div>
+
         </div>
 
-        <div class="col-md-3">
-            <div class="card p-3">
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow-sm border-0 p-3">
+
                 <h6 class="text-secondary">
-                    Pedidos
+                    🛒 Pedidos pendientes
                 </h6>
 
-                <h3>
-                    0
-                </h3>
+                <h2 class="fw-bold text-primary">
+                    {{ pedidos_pendientes }}
+                </h2>
+
             </div>
+
         </div>
 
-        <div class="col-md-3">
-            <div class="card p-3">
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow-sm border-0 p-3">
+
                 <h6 class="text-secondary">
-                    Compras
+                    📦 Compras del día
                 </h6>
 
-                <h3>
-                    0
-                </h3>
+                <h2 class="fw-bold text-warning">
+                    {{ compras_hoy }}
+                </h2>
+
             </div>
+
         </div>
 
-        <div class="col-md-3">
-            <div class="card p-3">
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow-sm border-0 p-3">
+
                 <h6 class="text-secondary">
-                    Caja
+                    📉 Stock crítico
                 </h6>
 
-                <h3>
-                    $0
-                </h3>
+                <h2 class="fw-bold text-danger">
+                    {{ stock_critico }}
+                </h2>
+
             </div>
+
         </div>
 
     </div>
 
+    <!-- Accesos rápidos -->
+
     <div class="mt-5">
 
-        <h4>
+        <h4 class="mb-3">
             Accesos rápidos
         </h4>
 
-        <div class="row g-3 mt-2">
+        <div class="row g-3">
 
-            <div class="col-md-3">
+            <div class="col-lg-3 col-md-6">
+
                 <button class="btn btn-primary w-100 p-3">
+
                     🛒 Nuevo Pedido
+
                 </button>
+
             </div>
 
-            <div class="col-md-3">
+            <div class="col-lg-3 col-md-6">
+
                 <button class="btn btn-success w-100 p-3">
+
                     💰 Caja
+
                 </button>
+
             </div>
 
-            <div class="col-md-3">
+            <div class="col-lg-3 col-md-6">
+
                 <button class="btn btn-warning w-100 p-3">
+
                     📦 Compras
+
                 </button>
+
             </div>
 
-            <div class="col-md-3">
+            <div class="col-lg-3 col-md-6">
+
                 <button class="btn btn-dark w-100 p-3">
+
                     📊 Reportes
+
                 </button>
+
             </div>
 
         </div>

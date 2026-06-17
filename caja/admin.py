@@ -28,3 +28,36 @@ class MovimientoCajaAdmin(admin.ModelAdmin):
     ordering = (
         "-creado",
     )
+
+    def has_delete_permission(
+        self,
+        request,
+        obj=None
+    ):
+
+        if obj and obj.referencia:
+            return False
+
+        return super().has_delete_permission(
+            request,
+            obj
+        )
+
+    def get_readonly_fields(
+        self,
+        request,
+        obj=None
+    ):
+
+        if obj and obj.referencia:
+
+            return (
+                "empresa",
+                "tipo",
+                "concepto",
+                "referencia",
+                "monto",
+                "observaciones",
+            )
+
+        return ()

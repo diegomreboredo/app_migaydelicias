@@ -79,7 +79,7 @@ class Pedido(models.Model):
           f"{self.cliente.nombre}"
       )
       
-      def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):
       
           es_nuevo = self.pk is None
       
