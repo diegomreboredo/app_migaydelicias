@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+
+:root {
+
+    /* Marca */
+
+    --erp-primary: #2563EB;
+    --erp-primary-dark: #1D4ED8;
+
+    --erp-success: #10B981;
+
+    /* Fondos */
+
+    --erp-bg: #F8FAFC;
+    --erp-surface: #FFFFFF;
+
+    /* Textos */
+
+    --erp-text: #1E293B;
+    --erp-text-muted: #64748B;
+
+    /* Bordes */
+
+    --erp-radius: 18px;
+}
+
+body {
+
+    font-family: "Lexend", sans-serif;
+
+    background-color: var(--erp-bg);
+
+    color: var(--erp-text);
+
+    font-size: 15px;
+}
+
+/* Tarjetas */
+
+.card {
+
+    border: none;
+
+    border-radius: var(--erp-radius);
+
+    background: var(--erp-surface);
+
+    box-shadow:
+        0 4px 20px rgba(
+            15,
+            23,
+            42,
+            0.06
+        );
+}
+
+/* Botones */
+
+.btn {
+
+    border-radius: 12px;
+
+    font-weight: 500;
+}
+
+.btn-primary {
+
+    background: var(--erp-primary);
+
+    border-color: var(--erp-primary);
+}
+
+.btn-primary:hover {
+
+    background: var(--erp-primary-dark);
+
+    border-color: var(--erp-primary-dark);
+}
+
+/* Títulos */
+
+.erp-title {
+
+    font-weight: 700;
+
+    color: var(--erp-text);
+}
+
+.erp-subtitle {
+
+    color: var(--erp-text-muted);
+}
+
+/* Navbar */
+
+.navbar {
+
+    backdrop-filter: blur(10px);
+}
+
+.list-group-item {
+
+    border-radius: 12px !important;
+
+    margin-bottom: 4px;
+
+    font-weight: 500;
+
+    transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+
+    background-color: #EFF6FF;
+
+    color: var(--erp-primary);
+
+    transform: translateX(4px);
+}
+
+.navbar {
+
+    background: #ffffff !important;
+}
+
+.navbar h5 {
+
+    color: var(--erp-text);
+
+    font-weight: 700;
+}
+
+.navbar small {
+
+    color: var(--erp-text-muted);
+}

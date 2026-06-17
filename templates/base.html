@@ -27,9 +27,12 @@
 
     <!-- CSS -->
 
-    <link
-        rel="stylesheet"
-        href="{% static 'css/style.css' %}">
+
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/erp-platform.css' %}"
+>
 
 </head>
 
@@ -37,52 +40,68 @@
 
 <!-- NAVBAR -->
 
-<nav class="navbar navbar-dark bg-dark shadow-sm">
-
-    <div class="container-fluid">
-
-        <button
-            class="btn btn-outline-light d-lg-none"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#sidebar">
-
-            <i class="bi bi-list"></i>
-
-        </button>
-
-        <span class="navbar-brand fw-bold">
-
-            ERP Platform
-
-        </span>
-
-        <div class="d-flex align-items-center gap-3">
-
-    <span class="text-white">
-        {{ request.user.username }}
-    </span>
-
-    <form
-    action="/login/logout/"
-    method="post"
-    class="d-inline"
->
-
-    {% csrf_token %}
+<nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm"><div class="container-fluid">
 
     <button
-        type="submit"
-        class="btn btn-outline-light btn-sm"
-    >
-        Salir
+        class="btn btn-outline-primary d-lg-none"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#sidebar">
+
+        <i class="bi bi-list"></i>
+
     </button>
 
-</form>
+    <div>
 
-</div>
+        <h5 class="fw-bold mb-0">
+            ERP Platform
+        </h5>
+
+        <small class="text-muted">
+            {{ empresa.nombre }}
+        </small>
 
     </div>
+
+    <div class="d-flex align-items-center gap-3">
+
+        <div class="text-end">
+
+            <div class="fw-semibold">
+
+                <i class="bi bi-person-circle me-1"></i>
+
+                {{ request.user.username }}
+
+            </div>
+
+            <small class="text-muted">
+                Usuario activo
+            </small>
+
+        </div>
+
+        <form
+            action="/login/logout/"
+            method="post"
+            class="d-inline">
+
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="btn btn-outline-danger btn-sm">
+
+                <i class="bi bi-box-arrow-right"></i>
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
 
 </nav>
 
@@ -92,91 +111,115 @@
 
         <!-- SIDEBAR DESKTOP -->
 
-        <aside class="col-lg-2 d-none d-lg-block bg-white border-end min-vh-100 p-3">
+        <aside class="col-lg-2 d-none d-lg-block bg-white border-end min-vh-100 p-3"><div class="mb-4">
 
-            <h5 class="mb-4">
+    <h4 class="fw-bold mb-0">
+        ERP Platform
+    </h4>
 
-                Menú
+    <small class="text-muted">
+        {{ empresa.nombre|default:"Sistema de Gestión" }}
+    </small>
 
-            </h5>
+</div>
 
-            <div class="list-group">
+<small class="text-uppercase text-muted fw-semibold">
+    General
+</small>
 
-                <a href="/"
-                   class="list-group-item list-group-item-action">
+<div class="list-group mt-2 mb-4">
 
-                    <i class="bi bi-house"></i>
-                    Dashboard
+    <a href="/"
+       class="list-group-item list-group-item-action border-0">
 
-                </a>
+        <i class="bi bi-house-door me-2"></i>
+        Dashboard
 
-                <a href="#"
-                   class="list-group-item list-group-item-action">
+    </a>
 
-                    <i class="bi bi-cart"></i>
-                    Pedidos
+</div>
 
-                </a>
+<small class="text-uppercase text-muted fw-semibold">
+    Ventas
+</small>
 
-                <a href="#"
-                   class="list-group-item list-group-item-action">
+<div class="list-group mt-2 mb-4">
 
-                    <i class="bi bi-fire"></i>
-                    Cocina
+    <a href="#"
+       class="list-group-item list-group-item-action border-0">
 
-                </a>
+        <i class="bi bi-cart3 me-2"></i>
+        Pedidos
 
-                <a href="#"
-                   class="list-group-item list-group-item-action">
+    </a>
 
-                    <i class="bi bi-cash-stack"></i>
-                    Caja
+    <a href="#"
+       class="list-group-item list-group-item-action border-0">
 
-                </a>
+        <i class="bi bi-people me-2"></i>
+        Clientes
 
-                <a href="#"
-                   class="list-group-item list-group-item-action">
+    </a>
 
-                    <i class="bi bi-box-seam"></i>
-                    Compras
+</div>
 
-                </a>
+<small class="text-uppercase text-muted fw-semibold">
+    Operaciones
+</small>
 
-                <a href="#"
-                   class="list-group-item list-group-item-action">
+<div class="list-group mt-2 mb-4">
 
-                    <i class="bi bi-boxes"></i>
-                    Inventario
+    <a href="#"
+       class="list-group-item list-group-item-action border-0">
 
-                </a>
+        <i class="bi bi-bag me-2"></i>
+        Compras
 
-                <a href="#"
-                   class="list-group-item list-group-item-action">
+    </a>
 
-                    <i class="bi bi-people"></i>
-                    Clientes
+    <a href="#"
+       class="list-group-item list-group-item-action border-0">
 
-                </a>
+        <i class="bi bi-box-seam me-2"></i>
+        Inventario
 
-                <a href="#"
-                   class="list-group-item list-group-item-action">
+    </a>
 
-                    <i class="bi bi-truck"></i>
-                    Proveedores
+    <a href="#"
+       class="list-group-item list-group-item-action border-0">
 
-                </a>
+        <i class="bi bi-truck me-2"></i>
+        Proveedores
 
-                <a href="/reportes/"
-                   class="list-group-item list-group-item-action">
+    </a>
 
-                    <i class="bi bi-bar-chart"></i>
-                    Reportes
+</div>
 
-                </a>
+<small class="text-uppercase text-muted fw-semibold">
+    Finanzas
+</small>
 
-            </div>
+<div class="list-group mt-2">
 
-        </aside>
+    <a href="#"
+       class="list-group-item list-group-item-action border-0">
+
+        <i class="bi bi-cash-stack me-2"></i>
+        Caja
+
+    </a>
+
+    <a href="/reportes/"
+       class="list-group-item list-group-item-action border-0">
+
+        <i class="bi bi-bar-chart me-2"></i>
+        Reportes
+
+    </a>
+
+</div>
+
+</aside>
 
         <!-- CONTENIDO -->
 
@@ -216,85 +259,101 @@
 
     </div>
 
-    <div class="offcanvas-body">
+    <div class="offcanvas-body"><small class="text-uppercase text-muted fw-semibold">
+    General
+</small>
 
-        <div class="list-group">
+<div class="list-group mt-2 mb-4">
 
-            <a href="/"
-               class="list-group-item list-group-item-action">
+    <a href="/"
+       class="list-group-item list-group-item-action border-0">
 
-                <i class="bi bi-house"></i>
-                Dashboard
+        <i class="bi bi-house-door me-2"></i>
+        Dashboard
 
-            </a>
+    </a>
 
-            <a href="#"
-               class="list-group-item list-group-item-action">
+</div>
 
-                <i class="bi bi-cart"></i>
-                Pedidos
+<small class="text-uppercase text-muted fw-semibold">
+    Ventas
+</small>
 
-            </a>
+<div class="list-group mt-2 mb-4">
 
-            <a href="#"
-               class="list-group-item list-group-item-action">
+    <a href="#"
+       class="list-group-item list-group-item-action border-0">
 
-                <i class="bi bi-fire"></i>
-                Cocina
+        <i class="bi bi-cart3 me-2"></i>
+        Pedidos
 
-            </a>
+    </a>
 
-            <a href="#"
-               class="list-group-item list-group-item-action">
+    <a href="#"
+       class="list-group-item list-group-item-action border-0">
 
-                <i class="bi bi-cash-stack"></i>
-                Caja
+        <i class="bi bi-people me-2"></i>
+        Clientes
 
-            </a>
+    </a>
 
-            <a href="#"
-               class="list-group-item list-group-item-action">
+</div>
 
-                <i class="bi bi-box-seam"></i>
-                Compras
+<small class="text-uppercase text-muted fw-semibold">
+    Operaciones
+</small>
 
-            </a>
+<div class="list-group mt-2 mb-4">
 
-            <a href="#"
-               class="list-group-item list-group-item-action">
+    <a href="#"
+       class="list-group-item list-group-item-action border-0">
 
-                <i class="bi bi-boxes"></i>
-                Inventario
+        <i class="bi bi-bag me-2"></i>
+        Compras
 
-            </a>
+    </a>
 
-            <a href="#"
-               class="list-group-item list-group-item-action">
+    <a href="#"
+       class="list-group-item list-group-item-action border-0">
 
-                <i class="bi bi-people"></i>
-                Clientes
+        <i class="bi bi-box-seam me-2"></i>
+        Inventario
 
-            </a>
+    </a>
 
-            <a href="#"
-               class="list-group-item list-group-item-action">
+    <a href="#"
+       class="list-group-item list-group-item-action border-0">
 
-                <i class="bi bi-truck"></i>
-                Proveedores
+        <i class="bi bi-truck me-2"></i>
+        Proveedores
 
-            </a>
+    </a>
 
-            <a href="/reportes/"
-               class="list-group-item list-group-item-action">
+</div>
 
-                <i class="bi bi-bar-chart"></i>
-                Reportes
+<small class="text-uppercase text-muted fw-semibold">
+    Finanzas
+</small>
 
-            </a>
+<div class="list-group mt-2">
 
-        </div>
+    <a href="#"
+       class="list-group-item list-group-item-action border-0">
 
-    </div>
+        <i class="bi bi-cash-stack me-2"></i>
+        Caja
+
+    </a>
+
+    <a href="/reportes/"
+       class="list-group-item list-group-item-action border-0">
+
+        <i class="bi bi-bar-chart me-2"></i>
+        Reportes
+
+    </a>
+
+</div>
 
 </div>
 

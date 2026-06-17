@@ -6,93 +6,48 @@ Dashboard
 
 {% block content %}
 
-<div class="container-fluid">
+<div class="container-fluid"><!-- Encabezado -->
 
-    <div class="mb-4">
-        <h2 class="fw-bold">
-            Dashboard
-        </h2>
+<div class="mb-5">
 
-        <p class="text-muted">
-            Bienvenido al ERP Platform
-        </p>
-    </div>
-    
-    <div class="alert alert-primary">
+    <h2 class="fw-bold mb-1">
+        Hola {{ request.user.first_name|default:request.user.username }} 👋
+    </h2>
 
-    <strong>Usuario:</strong>
-    {{ request.user.username }}
+    <p class="text-muted mb-0">
+        Bienvenido nuevamente a ERP Platform
+    </p>
 
-    <br>
-
-    <strong>Empresa:</strong>
-    {{ empresa.nombre }}
+    <small class="text-muted">
+        Empresa: {{ empresa.nombre }}
+    </small>
 
 </div>
 
-    <!-- Tarjetas -->
+<!-- Métricas -->
 
-    <div class="row g-4">
+<div class="row g-4">
 
-        <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6">
 
-            <div class="card shadow-sm border-0 p-3">
+        <div class="card p-4">
 
-                <h6 class="text-secondary">
-                    💰 Ventas del día
-                </h6>
+            <div class="d-flex justify-content-between align-items-center">
 
-                <h2 class="fw-bold text-success">
-                    ${{ total_ventas }}
-                </h2>
+                <div>
 
-            </div>
+                    <small class="text-muted">
+                        Ventas del día
+                    </small>
 
-        </div>
+                    <h3 class="fw-bold text-success mt-2">
+                        ${{ total_ventas }}
+                    </h3>
 
-        <div class="col-lg-3 col-md-6">
+                </div>
 
-            <div class="card shadow-sm border-0 p-3">
-
-                <h6 class="text-secondary">
-                    🛒 Pedidos pendientes
-                </h6>
-
-                <h2 class="fw-bold text-primary">
-                    {{ pedidos_pendientes }}
-                </h2>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card shadow-sm border-0 p-3">
-
-                <h6 class="text-secondary">
-                    📦 Compras del día
-                </h6>
-
-                <h2 class="fw-bold text-warning">
-                    {{ compras_hoy }}
-                </h2>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card shadow-sm border-0 p-3">
-
-                <h6 class="text-secondary">
-                    📉 Stock crítico
-                </h6>
-
-                <h2 class="fw-bold text-danger">
-                    {{ stock_critico }}
-                </h2>
+                <i class="bi bi-cash-stack text-success"
+                   style="font-size:2rem;"></i>
 
             </div>
 
@@ -100,53 +55,80 @@ Dashboard
 
     </div>
 
-    <!-- Accesos rápidos -->
+    <div class="col-lg-3 col-md-6">
 
-    <div class="mt-5">
+        <div class="card p-4">
 
-        <h4 class="mb-3">
-            Accesos rápidos
-        </h4>
+            <div class="d-flex justify-content-between align-items-center">
 
-        <div class="row g-3">
+                <div>
 
-            <div class="col-lg-3 col-md-6">
+                    <small class="text-muted">
+                        Pedidos pendientes
+                    </small>
 
-                <button class="btn btn-primary w-100 p-3">
+                    <h3 class="fw-bold text-primary mt-2">
+                        {{ pedidos_pendientes }}
+                    </h3>
 
-                    🛒 Nuevo Pedido
+                </div>
 
-                </button>
-
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-
-                <button class="btn btn-success w-100 p-3">
-
-                    💰 Caja
-
-                </button>
+                <i class="bi bi-cart3 text-primary"
+                   style="font-size:2rem;"></i>
 
             </div>
 
-            <div class="col-lg-3 col-md-6">
+        </div>
 
-                <button class="btn btn-warning w-100 p-3">
+    </div>
 
-                    📦 Compras
+    <div class="col-lg-3 col-md-6">
 
-                </button>
+        <div class="card p-4">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <small class="text-muted">
+                        Compras del día
+                    </small>
+
+                    <h3 class="fw-bold text-warning mt-2">
+                        {{ compras_hoy }}
+                    </h3>
+
+                </div>
+
+                <i class="bi bi-bag text-warning"
+                   style="font-size:2rem;"></i>
 
             </div>
 
-            <div class="col-lg-3 col-md-6">
+        </div>
 
-                <button class="btn btn-dark w-100 p-3">
+    </div>
 
-                    📊 Reportes
+    <div class="col-lg-3 col-md-6">
 
-                </button>
+        <div class="card p-4">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <small class="text-muted">
+                        Stock crítico
+                    </small>
+
+                    <h3 class="fw-bold text-danger mt-2">
+                        {{ stock_critico }}
+                    </h3>
+
+                </div>
+
+                <i class="bi bi-exclamation-triangle text-danger"
+                   style="font-size:2rem;"></i>
 
             </div>
 
@@ -156,4 +138,66 @@ Dashboard
 
 </div>
 
-{% endblock %}
+<!-- Accesos rápidos -->
+
+<div class="mt-5">
+
+    <h4 class="fw-bold mb-3">
+        Accesos rápidos
+    </h4>
+
+    <div class="row g-3">
+
+        <div class="col-lg-3 col-md-6">
+
+            <button class="btn btn-primary w-100 py-3">
+
+                <i class="bi bi-cart-plus me-2"></i>
+
+                Nuevo Pedido
+
+            </button>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <button class="btn btn-success w-100 py-3">
+
+                <i class="bi bi-cash-stack me-2"></i>
+
+                Caja
+
+            </button>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <button class="btn btn-warning w-100 py-3">
+
+                <i class="bi bi-bag me-2"></i>
+
+                Compras
+
+            </button>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <button class="btn btn-dark w-100 py-3">
+
+                <i class="bi bi-bar-chart me-2"></i>
+
+                Reportes
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>{% endblock %}
