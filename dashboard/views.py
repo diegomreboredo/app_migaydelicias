@@ -1,20 +1,25 @@
 from django.shortcuts import render
 from django.utils import timezone
 from decimal import Decimal
+from usuarios.utils import obtener_empresa
 
 from caja.models import MovimientoCaja
 from pedidos.models import Pedido
 from compras.models import Compra
 from productos.models import Producto
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def inicio(request):
+  
+    empresa = obtener_empresa(request)
 
     hoy = timezone.localdate()
 
     ventas_hoy = (
         MovimientoCaja.objects.filter(
             tipo="ingreso",
+            empresa=empresa,
             creado__date=hoy
         )
     )
@@ -25,14 +30,17 @@ def inicio(request):
     )
 
     pedidos_pendientes = Pedido.objects.filter(
+        empresa=empresa,
         estado="pendiente"
     ).count()
 
     compras_hoy = Compra.objects.filter(
+        empresa=empresa,
         creado__date=hoy
     ).count()
 
     stock_critico = Producto.objects.filter(
+        empresa=empresa,
         stock__lte=5
     ).count()
 
@@ -41,6 +49,7 @@ def inicio(request):
         "pedidos_pendientes": pedidos_pendientes,
         "compras_hoy": compras_hoy,
         "stock_critico": stock_critico,
+        "empresa": empresa,
     }
 
     return render(

@@ -8,6 +8,10 @@ urlpatterns = [
     path("", include("dashboard.urls")),
     path('admin/', admin.site.urls),
     path("reportes/", include("reportes.urls")),
+    path(
+    "login/",
+    include("usuarios.urls")
+),
 ]
 
 

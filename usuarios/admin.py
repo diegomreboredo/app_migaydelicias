@@ -1,3 +1,17 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import UsuarioEmpresa
+
+
+@admin.register(UsuarioEmpresa)
+class UsuarioEmpresaAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "usuario",
+        "empresa",
+    )
+
+    search_fields = (
+        "usuario__username",
+        "empresa__nombre",
+    )
