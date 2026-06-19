@@ -2,161 +2,576 @@
 
 :root {
 
-    /* Marca */
+/* Marca */
 
-    --erp-primary: #2563EB;
-    --erp-primary-dark: #1D4ED8;
+--erp-primary: #2563EB;
+--erp-primary-dark: #1D4ED8;
 
-    --erp-success: #10B981;
+--erp-success: #10B981;
+--erp-warning: #F59E0B;
+--erp-danger: #EF4444;
 
-    /* Fondos */
+/* Sidebar SaaS */
 
-    --erp-bg: #F8FAFC;
-    --erp-surface: #FFFFFF;
+--erp-sidebar: #102A43;
 
-    /* Textos */
+/* Fondos */
 
-    --erp-text: #1E293B;
-    --erp-text-muted: #64748B;
+--erp-bg: #F8FAFC;
+--erp-surface: #FFFFFF;
 
-    /* Bordes */
+/* Textos */
 
-    --erp-radius: 18px;
+--erp-text: #1E293B;
+--erp-text-muted: #64748B;
+
+/* Bordes */
+
+--erp-border: #E2E8F0;
+
+/* Radius */
+
+--erp-radius: 18px;
+
 }
+
+/* ================================================= /
+/ BASE /
+/ ================================================= */
 
 body {
 
-    font-family: "Lexend", sans-serif;
+font-family: "Lexend", sans-serif;
 
-    background-color: var(--erp-bg);
+background: var(--erp-bg);
 
-    color: var(--erp-text);
+color: var(--erp-text);
 
-    font-size: 15px;
+font-size: 15px;
+
 }
 
-/* Tarjetas */
+/* ================================================= /
+/ NAVBAR /
+/ ================================================= */
+
+.navbar {
+
+background: #FFFFFF !important;
+
+border-bottom: 1px solid var(--erp-border);
+
+box-shadow: 0 1px 3px rgba(0,0,0,.04);
+
+}
+
+.navbar-brand {
+
+color: var(--erp-text) !important;
+
+font-weight: 700;
+
+}
+
+.navbar small {
+
+color: var(--erp-text-muted);
+
+}
+
+.navbar .btn-outline-light {
+
+border-color: var(--erp-border);
+
+color: var(--erp-text);
+
+}
+
+.navbar .btn-outline-light:hover {
+
+background: var(--erp-primary);
+
+border-color: var(--erp-primary);
+
+color: white;
+
+}
+
+/* ================================================= /
+/ SIDEBAR DESKTOP /
+/ ================================================= */
+
+.sidebar-premium {
+
+background: var(--erp-sidebar);
+
+border-right: 1px solid rgba(255,255,255,.05);
+
+}
+
+.sidebar-premium h4 {
+
+color: white;
+
+font-weight: 700;
+
+}
+
+.sidebar-premium small {
+
+color: rgba(255,255,255,.55) !important;
+
+}
+
+.sidebar-premium .list-group {
+
+background: transparent;
+
+}
+
+.sidebar-premium .list-group-item {
+
+background: transparent;
+
+border: none;
+
+color: rgba(255,255,255,.85);
+
+border-radius: 10px !important;
+
+margin-bottom: 4px;
+
+transition: all .2s ease;
+
+}
+
+.sidebar-premium .list-group-item:hover {
+
+background: rgba(59,130,246,.15);
+
+color: #93C5FD;
+
+transform: translateX(4px);
+
+}
+
+/* ================================================= /
+/ SIDEBAR MOBILE /
+/ ================================================= */
+
+.offcanvas {
+
+background: var(--erp-sidebar) !important;
+
+color: white;
+
+}
+
+.offcanvas-header {
+
+border-bottom: 1px solid rgba(255,255,255,.08);
+
+}
+
+.offcanvas h5 {
+
+color: white;
+
+font-weight: 700;
+
+}
+
+.offcanvas .btn-close {
+
+filter: invert(1);
+
+}
+
+.offcanvas small {
+
+color: rgba(255,255,255,.55) !important;
+
+}
+
+.offcanvas .list-group {
+
+background: transparent;
+
+}
+
+.offcanvas .list-group-item {
+
+background: transparent;
+
+border: none;
+
+color: rgba(255,255,255,.85);
+
+border-radius: 10px !important;
+
+margin-bottom: 4px;
+
+transition: all .2s ease;
+
+}
+
+.offcanvas .list-group-item:hover {
+
+background: rgba(59,130,246,.15);
+
+color: #93C5FD;
+
+}
+
+/* ================================================= /
+/ CARDS /
+/ ================================================= */
 
 .card {
 
+border: none;
+
+border-radius: var(--erp-radius);
+
+background: white;
+
+box-shadow:
+    0 4px 20px rgba(15,23,42,.06);
+
+}
+
+/* ================================================= /
+/ TITULOS /
+/ ================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+
+color: var(--erp-text);
+
+font-weight: 700;
+
+}
+
+.text-muted {
+
+color: var(--erp-text-muted) !important;
+
+}
+
+/* ================================================= /
+/ BOTONES /
+/ ================================================= */
+
+.btn {
+
+border-radius: 12px;
+
+font-weight: 500;
+
+}
+
+.btn-primary {
+
+/*background: var(--erp-primary);*/
+background:#2563EB;
+
+/*border-color: var(--erp-primary);*/
+background:#1D4ED8;
+
+}
+
+.btn-primary:hover {
+
+background: var(--erp-primary-dark);
+
+border-color: var(--erp-primary-dark);
+
+}
+
+/* ================================================= /
+/ PEDIDOS /
+/ ================================================= */
+
+.pedido-card {
+
+background: white;
+
+border-left: 4px solid var(--erp-primary);
+
+border-radius: 14px;
+
+padding: 14px;
+
+min-height: 120px;
+
+box-shadow:
+    0 2px 10px rgba(0,0,0,.04);
+
+transition: .25s;
+
+}
+
+.pedido-card:hover {
+
+transform:translateY(-3px);
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+/* ================================================= /
+/ KPI /
+/ ================================================= */
+
+.kpi-card {
+
+padding: 20px;
+
+}
+
+.kpi-number {
+
+font-size: 2rem;
+
+font-weight: 700;
+
+}
+
+.kpi-success {
+
+color: var(--erp-success);
+
+}
+
+.kpi-warning {
+
+color: var(--erp-warning);
+
+}
+
+.kpi-danger {
+
+color: var(--erp-danger);
+
+}
+
+.kpi-primary {
+
+color: var(--erp-primary);
+
+}
+
+/* =========================
+   SIDEBAR ERP PLATFORM
+========================= */
+
+.sidebar-premium{
+    background: #0F172A;
+    border-right: 1px solid rgba(255,255,255,.05);
+}
+
+.sidebar-premium h4{
+    color: #FFFFFF;
+}
+
+.sidebar-premium small{
+    color: rgba(255,255,255,.60) !important;
+}
+
+.sidebar-premium .list-group{
+    background: transparent;
+}
+
+.sidebar-premium .list-group-item{
+    background: transparent;
+    color: #CBD5E1;
+    border: none !important;
+}
+
+.sidebar-premium .list-group-item:hover{
+    background: rgba(37,99,235,.18);
+    color: #60A5FA;
+}
+
+.sidebar-premium .list-group-item.active{
+    background: rgba(37,99,235,.25);
+    color: #60A5FA;
+}
+
+/* MOBILE */
+
+.sidebar-mobile{
+    background: #0F172A;
+    color: white;
+}
+
+.sidebar-mobile .offcanvas-header{
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.sidebar-mobile .list-group-item{
+    background: transparent;
+    color: #CBD5E1;
     border: none;
+}
 
-    border-radius: var(--erp-radius);
+.sidebar-mobile .list-group-item:hover{
+    background: rgba(37,99,235,.18);
+    color: #60A5FA;
+}
 
-    background: var(--erp-surface);
+.sidebar-mobile small{
+    color: rgba(255,255,255,.60) !important;
+}
+
+/* =========================
+   NAVBAR PREMIUM
+========================= */
+
+.navbar{
+    background: #FFFFFF !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+    min-height: 72px;
+}
+
+.navbar h5{
+    font-weight: 700;
+    color: #0F172A;
+}
+
+.navbar small{
+    color: #64748B !important;
+}
+
+.navbar .btn-outline-danger{
+    border-radius: 12px;
+}
+/* =========================
+   KPI CARDS
+========================= */
+
+.kpi-card{
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 24px;
+
+    border: 1px solid #E2E8F0;
 
     box-shadow:
         0 4px 20px rgba(
             15,
             23,
             42,
-            0.06
+            .05
+        );
+
+    transition: .2s;
+}
+
+.kpi-card:hover{
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 30px rgba(
+            15,
+            23,
+            42,
+            .08
         );
 }
-
-/* Botones */
-
-.btn {
-
-    border-radius: 12px;
-
-    font-weight: 500;
-}
-
-.btn-primary {
-
-    background: var(--erp-primary);
-
-    border-color: var(--erp-primary);
-}
-
-.btn-primary:hover {
-
-    background: var(--erp-primary-dark);
-
-    border-color: var(--erp-primary-dark);
-}
-
-/* Títulos */
-
-.erp-title {
-
-    font-weight: 700;
-
-    color: var(--erp-text);
-}
-
-.erp-subtitle {
-
-    color: var(--erp-text-muted);
-}
-
-/* Navbar */
-
-.navbar {
-
-    backdrop-filter: blur(10px);
-}
-
-.list-group-item {
-
-    border-radius: 12px !important;
-
-    margin-bottom: 4px;
-
-    font-weight: 500;
-
-    transition: all 0.2s ease;
-}
-
-.list-group-item:hover {
-
-    background-color: #EFF6FF;
-
-    color: var(--erp-primary);
-
-    transform: translateX(4px);
-}
-
-.navbar {
-
-    background: #ffffff !important;
-}
-
-.navbar h5 {
-
-    color: var(--erp-text);
-
-    font-weight: 700;
-}
-
-.navbar small {
-
-    color: var(--erp-text-muted);
-}
-
-.pedido-card {
-
-    border-left: 4px solid #0d6efd;
+.kpi-card {
 
     background: white;
 
-    border-radius: 12px;
+    border-radius: 18px;
 
-    padding: 14px;
+    padding: 20px;
 
-    margin-top: 12px;
-
-    box-shadow: 0 2px 8px rgba(0,0,0,.05);
-
-    min-height: 100px;
-
-    transition: .2s;
-
+    box-shadow:
+        0 4px 20px rgba(15,23,42,.06);
+}
+.kpi-card h2{
+    font-size:32px;
+    font-weight:700;
 }
 
-.pedido-card:hover {
+.kpi-icon{
 
-    transform: translateY(-2px);
+    width:48px;
+    height:48px;
 
+    border-radius:14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:white;
 }
+
+.bg-primary{
+    background:#2563EB!important;
+}
+
+.bg-success{
+    background:#10B981!important;
+}
+
+.bg-warning{
+    background:#F59E0B!important;
+}
+
+.bg-danger{
+    background:#EF4444!important;
+}
+
+.card{
+
+    transition:all .25s ease;
+}
+
+.card:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 12px 24px rgba(
+            15,
+            23,
+            42,
+            .08
+        );
+}
+
+.kanban-danger{
+
+    background:#FEE2E2;
+    color:#DC2626;
+}
+
+.kanban-warning{
+
+    background:#FEF3C7;
+    color:#D97706;
+}
+
+.kanban-success{
+
+    background:#DCFCE7;
+    color:#16A34A;
+}
+
+.kanban-secondary{
+
+    background:#E2E8F0;
+    color:#475569;
+}
+
+

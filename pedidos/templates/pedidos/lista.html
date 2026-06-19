@@ -13,44 +13,49 @@ Pedidos
 
     <div class="col-lg-3 col-md-6">
 
-        <div class="card border-0 shadow-sm p-3">
-            <small class="text-muted">Pedidos hoy</small>
-            <h3 class="fw-bold mb-0">
+        <div class="kpi-card">
+          <i class="bi bi-cart3 text-primary fs-3"></i>
+
+            <small class="text-muted">Pedidos</small>
+            <h2 class="fw-bold mt-2">
                 {{ pedidos_hoy }}
-            </h3>
+            </h2>
         </div>
 
     </div>
 
     <div class="col-lg-3 col-md-6">
 
-        <div class="card border-0 shadow-sm p-3">
+        <div class="kpi-card">
+          <i class="bi bi-exclamation-circle text-danger fs-3"></i>
             <small class="text-muted">Pendientes</small>
-            <h3 class="fw-bold text-danger mb-0">
+            <h2 class="fw-bold text-danger mt-2">
                 {{ pendientes_total }}
-            </h3>
+            </h2>
         </div>
 
     </div>
 
     <div class="col-lg-3 col-md-6">
 
-        <div class="card border-0 shadow-sm p-3">
+        <div class="kpi-card">
+          <i class="bi bi-clock-history text-warning fs-3"></i>
             <small class="text-muted">En preparación</small>
-            <h3 class="fw-bold text-warning mb-0">
+            <h2 class="fw-bold text-warning mt-2">
                 {{ preparacion_total }}
-            </h3>
+            </h2>
         </div>
 
     </div>
 
     <div class="col-lg-3 col-md-6">
 
-        <div class="card border-0 shadow-sm p-3">
+        <div class="kpi-card">
+          <i class="bi bi-cash-stack text-success fs-3"></i>
             <small class="text-muted">Facturación</small>
-            <h3 class="fw-bold text-success mb-0">
+            <h2 class="fw-bold text-success mt-2">
                 ${{ facturacion_total }}
-            </h3>
+            </h2>
         </div>
 
     </div>
@@ -60,6 +65,7 @@ Pedidos
 <!-- TÍTULO -->
 
 <div class="d-flex justify-content-between align-items-center mb-4">
+
 
     <div>
         <h2 class="fw-bold mb-0">
@@ -73,6 +79,21 @@ Pedidos
 
 </div>
 
+
+<div>
+
+    <a href="/pedidos/nuevo/"
+       class="btn btn-primary">
+
+        <i class="bi bi-plus-circle me-2"></i>
+
+        Nuevo pedido
+
+    </a>
+
+</div>
+<br>
+
 <!-- KANBAN -->
 
 <div class="row g-4">
@@ -83,7 +104,7 @@ Pedidos
 
         <div class="card border-0 shadow-sm h-100">
 
-            <div class="card-header bg-danger-subtle">
+            <div class="card-header kanban-danger">
 
                 <strong>
                     Pendientes ({{ pendientes_total }})
@@ -99,23 +120,41 @@ Pedidos
 
                         <div class="card-body">
 
-                            <div class="fw-bold">
-                                Pedido #{{ pedido.id }}
-                            </div>
+    <div class="fw-bold mb-2">
+        Pedido #{{ pedido.id }}
+    </div>
 
-                            <div>
-                                {{ pedido.cliente.nombre }}
-                            </div>
+    <div>
+        {{ pedido.cliente.nombre }}
+    </div>
 
-                            <div class="text-success fw-semibold">
-                                ${{ pedido.total }}
-                            </div>
+    <small class="text-muted d-block">
+        {{ pedido.cliente.direccion }}
+    </small>
 
-                            <small class="text-muted">
-                                {{ pedido.creado|date:"d/m/Y H:i" }}
-                            </small>
+    <div class="text-success fw-semibold mt-2">
+        ${{ pedido.total }}
+    </div>
 
-                        </div>
+    <small class="text-muted d-block">
+        {{ pedido.detalles.count }} productos
+    </small>
+
+    <small class="text-muted d-block mt-1">
+        {{ pedido.creado|date:"d/m/Y H:i" }}
+    </small>
+
+    <div class="mt-3">
+
+        <button class="btn btn-primary btn-sm w-100">
+
+            Ver pedido
+
+        </button>
+
+    </div>
+
+</div>
 
                     </div>
 
@@ -155,23 +194,41 @@ Pedidos
 
                         <div class="card-body">
 
-                            <div class="fw-bold">
-                                Pedido #{{ pedido.id }}
-                            </div>
+    <div class="fw-bold mb-2">
+        Pedido #{{ pedido.id }}
+    </div>
 
-                            <div>
-                                {{ pedido.cliente.nombre }}
-                            </div>
+    <div>
+        {{ pedido.cliente.nombre }}
+    </div>
 
-                            <div class="text-success fw-semibold">
-                                ${{ pedido.total }}
-                            </div>
+    <small class="text-muted d-block">
+        {{ pedido.cliente.direccion }}
+    </small>
 
-                            <small class="text-muted">
-                                {{ pedido.creado|date:"d/m/Y H:i" }}
-                            </small>
+    <div class="text-success fw-semibold mt-2">
+        ${{ pedido.total }}
+    </div>
 
-                        </div>
+    <small class="text-muted d-block">
+        {{ pedido.detalles.count }} productos
+    </small>
+
+    <small class="text-muted d-block mt-1">
+        {{ pedido.creado|date:"d/m/Y H:i" }}
+    </small>
+
+    <div class="mt-3">
+
+        <button class="btn btn-primary btn-sm w-100">
+
+            Ver pedido
+
+        </button>
+
+    </div>
+
+</div>
 
                     </div>
 
@@ -211,23 +268,41 @@ Pedidos
 
                         <div class="card-body">
 
-                            <div class="fw-bold">
-                                Pedido #{{ pedido.id }}
-                            </div>
+    <div class="fw-bold mb-2">
+        Pedido #{{ pedido.id }}
+    </div>
 
-                            <div>
-                                {{ pedido.cliente.nombre }}
-                            </div>
+    <div>
+        {{ pedido.cliente.nombre }}
+    </div>
 
-                            <div class="text-success fw-semibold">
-                                ${{ pedido.total }}
-                            </div>
+    <small class="text-muted d-block">
+        {{ pedido.cliente.direccion }}
+    </small>
 
-                            <small class="text-muted">
-                                {{ pedido.creado|date:"d/m/Y H:i" }}
-                            </small>
+    <div class="text-success fw-semibold mt-2">
+        ${{ pedido.total }}
+    </div>
 
-                        </div>
+    <small class="text-muted d-block">
+        {{ pedido.detalles.count }} productos
+    </small>
+
+    <small class="text-muted d-block mt-1">
+        {{ pedido.creado|date:"d/m/Y H:i" }}
+    </small>
+
+    <div class="mt-3">
+
+        <button class="btn btn-primary btn-sm w-100">
+
+            Ver pedido
+
+        </button>
+
+    </div>
+
+</div>
 
                     </div>
 
@@ -267,23 +342,41 @@ Pedidos
 
                         <div class="card-body">
 
-                            <div class="fw-bold">
-                                Pedido #{{ pedido.id }}
-                            </div>
+    <div class="fw-bold mb-2">
+        Pedido #{{ pedido.id }}
+    </div>
 
-                            <div>
-                                {{ pedido.cliente.nombre }}
-                            </div>
+    <div>
+        {{ pedido.cliente.nombre }}
+    </div>
 
-                            <div class="text-success fw-semibold">
-                                ${{ pedido.total }}
-                            </div>
+    <small class="text-muted d-block">
+        {{ pedido.cliente.direccion }}
+    </small>
 
-                            <small class="text-muted">
-                                {{ pedido.creado|date:"d/m/Y H:i" }}
-                            </small>
+    <div class="text-success fw-semibold mt-2">
+        ${{ pedido.total }}
+    </div>
 
-                        </div>
+    <small class="text-muted d-block">
+        {{ pedido.detalles.count }} productos
+    </small>
+
+    <small class="text-muted d-block mt-1">
+        {{ pedido.creado|date:"d/m/Y H:i" }}
+    </small>
+
+    <div class="mt-3">
+
+        <button class="btn btn-primary btn-sm w-100">
+
+            Ver pedido
+
+        </button>
+
+    </div>
+
+</div>
 
                     </div>
 

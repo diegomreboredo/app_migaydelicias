@@ -16,6 +16,10 @@ path(
     "pedidos/",
     include("pedidos.urls")
 ),
+path(
+    "clientes/",
+    include("clientes.urls")
+),
 ]
 
 
