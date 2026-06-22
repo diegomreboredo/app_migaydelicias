@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}
+Pedido #{{ pedido.id }}
+{% endblock %}
+
+{% block content %}
+
+<a href="/pedidos/"
+   class="btn btn-outline-secondary mb-3">
+
+    <i class="bi bi-arrow-left me-2"></i>
+
+    Volver a Pedidos
+
+</a>
+
+<div class="card p-4">
+
+    <div class="d-flex justify-content-between mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                Pedido #{{ pedido.id }}
+            </h2>
+
+            <small class="text-muted">
+                {{ pedido.creado|date:"d/m/Y H:i" }}
+            </small>
+
+        </div>
+
+        <span class="badge bg-primary">
+            {{ pedido.get_estado_display }}
+        </span>
+
+    </div>
+
+    <hr>
+
+    <h5>Cliente</h5>
+
+    <p class="mb-1">
+        <strong>{{ pedido.cliente.nombre }}</strong>
+    </p>
+
+    <p class="mb-1">
+        {{ pedido.cliente.direccion }}
+    </p>
+
+    <p class="mb-4">
+        {{ pedido.cliente.telefono }}
+    </p>
+
+    <h5>Productos</h5>
+
+    <div class="table-responsive">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Subtotal</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for detalle in pedido.detalles.all %}
+
+                <tr>
+
+                    <td>{{ detalle.producto.nombre }}</td>
+
+                    <td>{{ detalle.cantidad }}</td>
+
+                    <td>${{ detalle.precio_unitario }}</td>
+
+                    <td>${{ detalle.subtotal }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="text-end mt-4">
+
+        <h4 class="fw-bold">
+
+            Total: ${{ pedido.total }}
+
+        </h4>
+
+    </div>
+    
+    <hr>
+
+<div class="d-flex gap-2 mt-3">
+
+    {% if pedido.estado == "pendiente" %}
+
+        <a href="{% url 'cambiar_estado' pedido.id 'preparacion' %}"
+           class="btn btn-warning">
+
+            Pasar a preparación
+
+        </a>
+
+    {% endif %}
+
+    {% if pedido.estado == "preparacion" %}
+
+        <a href="{% url 'cambiar_estado' pedido.id 'listo' %}"
+           class="btn btn-success">
+
+            Marcar listo
+
+        </a>
+
+    {% endif %}
+
+    {% if pedido.estado == "listo" %}
+
+        <a href="{% url 'cambiar_estado' pedido.id 'entregado' %}"
+           class="btn btn-primary">
+
+            Entregar pedido
+
+        </a>
+
+    {% endif %}
+
+</div>
+
+</div>
+
+{% endblock %}

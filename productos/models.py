@@ -60,7 +60,7 @@ class Producto(models.Model):
         ordering = ["nombre"]
         
     def clean(self):
-      if self.categoria and self.empresa:
+      if self.categoria_id and self.empresa_id:
           if self.categoria.empresa != self.empresa:
               raise ValidationError(
                   "La categoría debe pertenecer a la misma empresa que el producto."

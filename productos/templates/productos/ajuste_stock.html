@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}
+Ajuste de Stock
+{% endblock %}
+
+{% block content %}
+
+<a href="/productos/"
+   class="btn btn-outline-secondary mb-3">
+
+    <i class="bi bi-arrow-left me-2"></i>
+
+    Volver a Productos
+
+</a>
+
+<div class="card border-0 shadow-sm">
+
+    <div class="card-body">
+
+        <h2 class="fw-bold">
+
+            Ajuste de Stock
+
+        </h2>
+
+        <p class="text-muted">
+
+            {{ producto.nombre }}
+
+        </p>
+
+        <p>
+
+            Stock actual:
+            <strong>{{ producto.stock }}</strong>
+
+        </p>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Cantidad
+                </label>
+
+                {{ form.cantidad }}
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Motivo
+                </label>
+
+                {{ form.motivo }}
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-danger">
+
+                Descontar Stock
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}
+Agregar Stock
+{% endblock %}
+
+
+
+{% block content %}
+
+<a href="/productos/"
+   class="btn btn-outline-secondary mb-3">
+
+    <i class="bi bi-arrow-left me-2"></i>
+
+    Volver a Productos
+
+</a>
+
+<div class="card border-0 shadow-sm">
+
+<div class="card border-0 shadow-sm">
+
+    <div class="card-body p-4">
+
+        <h2 class="fw-bold mb-3">
+
+            + Stock
+
+        </h2>
+
+        <p class="text-muted">
+
+            {{ producto.nombre }}
+
+        </p>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Cantidad
+                </label>
+
+                {{ form.cantidad }}
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Motivo
+                </label>
+
+                {{ form.motivo }}
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-success">
+
+                Agregar Stock
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

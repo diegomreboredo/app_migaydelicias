@@ -39,10 +39,13 @@ def inicio(request):
         creado__date=hoy
     ).count()
 
-    stock_critico = Producto.objects.filter(
-        empresa=empresa,
-        stock__lte=5
-    ).count()
+    stock_critico = sum(
+    1
+    for producto in Producto.objects.filter(
+        empresa=empresa
+    )
+    if producto.stock <= producto.stock_minimo
+)
 
     context = {
         "total_ventas": total_ventas or Decimal("0"),

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}
+Movimientos
+{% endblock %}
+
+{% block content %}
+
+<a href="/productos/"
+   class="btn btn-outline-secondary mb-3">
+
+    <i class="bi bi-arrow-left me-2"></i>
+
+    Volver a Productos
+
+</a>
+
+<div class="card border-0 shadow-sm">
+
+    <div class="card-body">
+
+        <h2 class="fw-bold">
+
+            {{ producto.nombre }}
+
+        </h2>
+
+        <p class="text-muted">
+
+            Stock actual:
+            <strong>{{ producto.stock }}</strong>
+
+        </p>
+
+        <hr>
+
+        {% for movimiento in movimientos %}
+
+        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+
+            <div>
+
+                <strong>
+
+                    {{ movimiento.get_tipo_display }}
+
+                </strong>
+
+                <br>
+
+                <small class="text-muted">
+
+                    {{ movimiento.motivo }}
+
+                </small>
+
+            </div>
+
+            <div class="text-end">
+
+                <span class="fw-bold">
+
+                    {{ movimiento.cantidad }}
+
+                </span>
+
+                <br>
+
+                <small class="text-muted">
+
+                    {{ movimiento.creado|date:"d/m/Y H:i" }}
+
+                </small>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <p class="text-muted">
+
+            Sin movimientos registrados.
+
+        </p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

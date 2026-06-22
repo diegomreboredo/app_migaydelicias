@@ -16,14 +16,14 @@
     <!-- Bootstrap -->
 
     <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    rel="stylesheet"
+    href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
 
     <!-- Bootstrap Icons -->
 
     <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
-        rel="stylesheet">
+    rel="stylesheet"
+    href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}">
 
     <!-- CSS -->
 
@@ -162,10 +162,16 @@
     </a>
 
 </div>
+<div class="list-group mt-2 mb-4">
 
-<small class="text-uppercase text-muted fw-semibold">
-    Operaciones
-</small>
+<a href="/productos/"
+   class="list-group-item list-group-item-action border-0">
+
+    <i class="bi bi-box me-2"></i>
+    Productos
+
+</a>
+<div/>
 
 <div class="list-group mt-2 mb-4">
 
@@ -299,9 +305,13 @@
 
 </div>
 
-<small class="text-uppercase text-muted fw-semibold">
-    Operaciones
-</small>
+<a href="/productos/"
+   class="list-group-item list-group-item-action border-0">
+
+    <i class="bi bi-box me-2"></i>
+    Productos
+
+</a>
 
 <div class="list-group mt-2 mb-4">
 
@@ -357,7 +367,9 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script
+    src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}">
+</script>
 
 <script src="{% static 'js/main.js' %}"></script>
 
