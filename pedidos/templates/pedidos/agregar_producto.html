@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}
+Agregar producto
+{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'detalle_pedido' pedido.id %}"
+   class="btn btn-outline-secondary mb-3">
+
+    <i class="bi bi-arrow-left me-2"></i>
+
+    Volver al pedido
+
+</a>
+
+{% if form.non_field_errors %}
+
+<div class="alert alert-danger">
+
+    {% for error in form.non_field_errors %}
+
+        {{ error }}
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+<div class="card p-4">
+
+    <h3 class="mb-4">
+
+        Agregar producto al Pedido #{{ pedido.id }}
+
+    </h3>
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Producto
+            </label>
+
+            {{ form.producto }}
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Cantidad
+            </label>
+
+            {{ form.cantidad }}
+
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-primary">
+
+            Agregar
+
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

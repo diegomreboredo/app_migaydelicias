@@ -102,6 +102,46 @@ Pedidos
     </a>
 
 </div>
+
+<form method="get" class="mb-4">
+
+    <div class="input-group">
+
+        <span class="input-group-text">
+
+            <i class="bi bi-search"></i>
+
+        </span>
+
+        <input
+            type="text"
+            name="q"
+            value="{{ q }}"
+            class="form-control"
+            placeholder="Buscar cliente...">
+
+        <button
+            type="submit"
+            class="btn btn-primary">
+
+            Buscar
+
+        </button>
+
+        {% if q %}
+
+        <a href="/pedidos/"
+           class="btn btn-outline-secondary">
+
+            Limpiar
+
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</form>
 <br>
 
 <!-- KANBAN -->
@@ -110,7 +150,7 @@ Pedidos
 
     <!-- PENDIENTES -->
 
-    <div class="col-lg-3">
+    <div class="col-lg-2">
 
         <div class="card border-0 shadow-sm h-100">
 
@@ -185,7 +225,7 @@ Pedidos
 
     <!-- PREPARACION -->
 
-    <div class="col-lg-3">
+    <div class="col-lg-2">
 
         <div class="card border-0 shadow-sm h-100">
 
@@ -260,7 +300,7 @@ Pedidos
 
     <!-- LISTOS -->
 
-    <div class="col-lg-3">
+    <div class="col-lg-2">
 
         <div class="card border-0 shadow-sm h-100">
 
@@ -335,7 +375,7 @@ Pedidos
 
     <!-- ENTREGADOS -->
 
-    <div class="col-lg-3">
+    <div class="col-lg-2">
 
         <div class="card border-0 shadow-sm h-100">
 
@@ -403,6 +443,78 @@ Pedidos
                 {% endfor %}
 
             </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="col-lg-2">
+
+    <div class="card border-0 shadow-sm h-100">
+
+        <div class="card-header bg-danger-subtle">
+
+            <strong>
+                Cancelados ({{ cancelados_total }})
+            </strong>
+
+        </div>
+
+        <div class="card-body">
+
+            {% for pedido in cancelados %}
+
+                <div class="card mb-3 shadow-sm border-start border-danger border-4">
+
+                    <div class="card-body">
+
+                        <div class="fw-bold mb-2">
+                            Pedido #{{ pedido.id }}
+                        </div>
+
+                        <div>
+                            {{ pedido.cliente.nombre }}
+                        </div>
+
+                        <small class="text-muted d-block">
+                            {{ pedido.cliente.direccion }}
+                        </small>
+
+                        <div class="text-danger fw-semibold mt-2">
+                            CANCELADO
+                        </div>
+
+                        <small class="text-muted d-block">
+                            {{ pedido.detalles.count }} productos
+                        </small>
+
+                        <small class="text-muted d-block mt-1">
+                            {{ pedido.creado|date:"d/m/Y H:i" }}
+                        </small>
+
+                        <div class="mt-3">
+
+                            <a href="{% url 'detalle_pedido' pedido.id %}"
+                               class="btn btn-primary btn-sm w-100">
+
+                                Ver pedido
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p class="text-muted">
+                    Sin pedidos
+                </p>
+
+            {% endfor %}
 
         </div>
 

@@ -31,9 +31,37 @@ Pedido #{{ pedido.id }}
 
         </div>
 
-        <span class="badge bg-primary">
-            {{ pedido.get_estado_display }}
-        </span>
+        {% if pedido.estado == "pendiente" %}
+
+<span class="badge bg-warning text-dark">
+    Pendiente
+</span>
+
+{% elif pedido.estado == "preparacion" %}
+
+<span class="badge bg-warning">
+    En preparación
+</span>
+
+{% elif pedido.estado == "listo" %}
+
+<span class="badge bg-info">
+    Listo
+</span>
+
+{% elif pedido.estado == "entregado" %}
+
+<span class="badge bg-success">
+    Entregado
+</span>
+
+{% elif pedido.estado == "cancelado" %}
+
+<span class="badge bg-danger">
+    Cancelado
+</span>
+
+{% endif %}
 
     </div>
 
@@ -55,44 +83,124 @@ Pedido #{{ pedido.id }}
 
     <h5>Productos</h5>
 
-    <div class="table-responsive">
+{% if pedido.estado != "entregado" and pedido.estado != "cancelado" %}
 
-        <table class="table">
+<a href="{% url 'agregar_producto_pedido' pedido.id %}"
+   class="btn btn-primary btn-sm mb-3">
 
-            <thead>
+    <i class="bi bi-plus-circle me-2"></i>
 
-                <tr>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                    <th>Subtotal</th>
-                </tr>
+    Agregar producto
 
-            </thead>
+</a>
 
-            <tbody>
+{% endif %}
 
-                {% for detalle in pedido.detalles.all %}
+<div class="table-responsive">
 
-                <tr>
+    <table class="table">
 
-                    <td>{{ detalle.producto.nombre }}</td>
+        <thead>
 
-                    <td>{{ detalle.cantidad }}</td>
+            <tr>
 
-                    <td>${{ detalle.precio_unitario }}</td>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
 
-                    <td>${{ detalle.subtotal }}</td>
+            </tr>
 
-                </tr>
+        </thead>
 
-                {% endfor %}
+        <tbody>
 
-            </tbody>
+            {% for detalle in pedido.detalles.all %}
 
-        </table>
+            <tr>
 
-    </div>
+                <td>
+                    {{ detalle.producto.nombre }}
+                </td>
+
+                <td>
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        {% if pedido.estado != "entregado" and pedido.estado != "cancelado" %}
+
+                            <a href="{% url 'restar_cantidad_detalle' detalle.id %}"
+                               class="btn btn-sm btn-outline-secondary">
+
+                                -
+
+                            </a>
+
+                            <strong>{{ detalle.cantidad }}</strong>
+
+                            <a href="{% url 'sumar_cantidad_detalle' detalle.id %}"
+                               class="btn btn-sm btn-outline-primary">
+
+                                +
+
+                            </a>
+
+                        {% else %}
+
+                            <strong>{{ detalle.cantidad }}</strong>
+
+                        {% endif %}
+
+                    </div>
+
+                </td>
+
+                <td>
+                    ${{ detalle.precio_unitario }}
+                </td>
+
+                <td>
+                    ${{ detalle.subtotal }}
+                </td>
+
+                <td>
+
+                    {% if pedido.estado != "entregado" and pedido.estado != "cancelado" %}
+
+                        <a href="{% url 'eliminar_detalle_pedido' detalle.id %}"
+                           class="btn btn-sm btn-outline-danger">
+
+                            <i class="bi bi-trash"></i>
+
+                        </a>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="5"
+                    class="text-center text-muted">
+
+                    No hay productos cargados
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
 
     <div class="text-end mt-4">
 
@@ -101,6 +209,15 @@ Pedido #{{ pedido.id }}
             Total: ${{ pedido.total }}
 
         </h4>
+        <p class="text-muted mb-0">
+
+    {{ pedido.detalles.count }} productos
+
+    ·
+
+    {{ total_unidades }} unidades
+
+</p>
 
     </div>
     
@@ -129,6 +246,8 @@ Pedido #{{ pedido.id }}
         </a>
 
     {% endif %}
+    
+    
 
     {% if pedido.estado == "listo" %}
 
@@ -139,6 +258,18 @@ Pedido #{{ pedido.id }}
 
         </a>
 
+    {% endif %}
+    
+    {% if pedido.estado != "entregado" and pedido.estado != "cancelado" %}
+
+    <a href="{% url 'cambiar_estado' pedido.id 'cancelado' %}"
+   class="btn btn-danger"
+   onclick="return confirm('¿Seguro que desea cancelar este pedido?')">
+
+    Cancelar pedido
+
+</a>
+    
     {% endif %}
 
 </div>
