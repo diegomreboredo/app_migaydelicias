@@ -97,12 +97,13 @@ def crear_cliente(request):
         form = ClienteForm()
 
     return render(
-        request,
-        "clientes/crear.html",
-        {
-            "form": form
-        }
-    )
+    request,
+    "clientes/crear.html",
+    {
+        "form": form,
+        "empresa": empresa,
+    }
+)
     
 @login_required
 def eliminar_cliente(request, pk):

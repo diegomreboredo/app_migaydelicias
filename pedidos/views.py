@@ -153,6 +153,10 @@ def detalle_pedido(request, pedido_id):
     detalle.cantidad
     for detalle in pedido.detalles.all()
 )
+    total_unidades = sum(
+    detalle.cantidad
+    for detalle in pedido.detalles.all()
+)
 
     return render(
         request,

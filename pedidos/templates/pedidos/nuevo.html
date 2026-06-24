@@ -47,62 +47,51 @@ Nuevo Pedido
 
 </div>
 
-<div class="card p-4">
+<div class="card shadow-sm border-0">
+    <div class="card-body p-4">
 
     <form method="post">
 
-        {% csrf_token %}
+    {% csrf_token %}
 
-        <div class="mb-3">
+    <div class="mb-3">
 
-            <label class="form-label">
-                Cliente
-            </label>
+        <label class="form-label">
+            Cliente
+        </label>
 
-            {{ form.cliente }}
+        {{ form.cliente }}
 
-        </div>
+    </div>
 
-        <div class="mb-3">
+    <div class="mb-3">
 
-            <label class="form-label">
-                Producto
-            </label>
+        <label class="form-label">
+            Observaciones
+        </label>
 
-            {{ form.producto }}
+        {{ form.observaciones }}
 
-        </div>
+    </div>
 
-        <div class="mb-3">
+    <button
+    type="submit"
+    class="btn btn-primary">
 
-            <label class="form-label">
-                Cantidad
-            </label>
+    <i class="bi bi-check-circle me-2"></i>
 
-            {{ form.cantidad }}
+    Crear Pedido
 
-        </div>
+</button>
+<div class="alert alert-info mt-3">
 
-        <div class="mb-3">
+    Después de crear el pedido podrá agregar productos.
 
-            <label class="form-label">
-                Observaciones
-            </label>
+</div>
 
-            {{ form.observaciones }}
+</form>
 
-        </div>
-
-        <button
-            type="submit"
-            class="btn btn-primary">
-
-            Guardar Pedido
-
-        </button>
-
-    </form>
-
+</div>
 </div>
 
 {% endblock %}

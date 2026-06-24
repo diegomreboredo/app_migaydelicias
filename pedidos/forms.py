@@ -27,3 +27,11 @@ class PedidoForm(forms.Form):
                 activo=True
             )
         )
+        self.fields["cliente"].widget.attrs.update({
+          "class": "form-select"
+      })
+      
+        self.fields["observaciones"].widget.attrs.update({
+          "class": "form-control",
+          "placeholder": "Observaciones del pedido..."
+      })

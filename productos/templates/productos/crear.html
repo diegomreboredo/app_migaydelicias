@@ -6,7 +6,6 @@ Nuevo Producto
 
 {% block content %}
 
-
 <a href="/productos/"
    class="btn btn-outline-secondary mb-3">
 
@@ -18,29 +17,29 @@ Nuevo Producto
 
 <div class="card border-0 shadow-sm">
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-
-    <div>
+    <div class="card-body p-4">
 
         <h2 class="fw-bold mb-0">
             Nuevo Producto
         </h2>
 
-        <small class="text-muted">
+        <small class="text-muted d-block mb-4">
             Crear producto para {{ empresa.nombre }}
         </small>
-
-    </div>
-
-</div>
-
-<div class="card border-0 shadow-sm">
-
-    <div class="card-body p-4">
 
         <form method="post">
 
             {% csrf_token %}
+
+            {% if form.errors %}
+
+            <div class="alert alert-danger">
+
+                {{ form.errors }}
+
+            </div>
+
+            {% endif %}
 
             <div class="mb-3">
 
@@ -85,22 +84,12 @@ Nuevo Producto
             <div class="mb-3">
 
                 <label class="form-label">
-                    Stock
+                    Stock inicial
                 </label>
 
-                {{ form.stock }}
+                {{ form.stock_inicial }}
 
             </div>
-            
-            <div class="mb-3">
-
-              <label class="form-label">
-                  Stock inicial
-              </label>
-          
-              {{ form.stock_inicial }}
-          
-          </div>
 
             <div class="mb-3">
 
@@ -117,9 +106,7 @@ Nuevo Producto
                 {{ form.activo }}
 
                 <label class="form-check-label">
-
                     Producto activo
-
                 </label>
 
             </div>
@@ -128,7 +115,9 @@ Nuevo Producto
                 type="submit"
                 class="btn btn-primary">
 
-                Guardar producto
+                <i class="bi bi-check-circle me-2"></i>
+
+                Guardar Producto
 
             </button>
 

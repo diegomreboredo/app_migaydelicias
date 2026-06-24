@@ -15,9 +15,29 @@ class ClienteForm(forms.ModelForm):
         ]
 
         widgets = {
+            "nombre": forms.TextInput(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+
+            "telefono": forms.TextInput(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+
+            "direccion": forms.TextInput(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+
             "observaciones": forms.Textarea(
                 attrs={
-                    "rows": 3
+                    "class": "form-control",
+                    "rows": 3,
+                    "placeholder": "Observaciones del cliente..."
                 }
-            )
+            ),
         }
