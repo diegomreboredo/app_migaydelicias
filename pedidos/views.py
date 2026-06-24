@@ -5,6 +5,8 @@ from .forms import PedidoForm
 from .models import Pedido, DetallePedido
 from django.shortcuts import get_object_or_404
 from .forms_detalle import DetallePedidoForm
+from productos.models import Producto
+from categorias.models import Categoria
 
 @login_required
 def lista_pedidos(request):
@@ -198,6 +200,29 @@ def agregar_producto_pedido(request, pedido_id):
         id=pedido_id,
         empresa=empresa
     )
+    
+    q = request.GET.get("q", "")
+    categoria_id = request.GET.get("categoria")
+    
+    productos = Producto.objects.filter(
+        empresa=empresa,
+        activo=True
+    )
+    
+    if q:
+        productos = productos.filter(
+            nombre__icontains=q
+        )
+    
+    if categoria_id:
+        productos = productos.filter(
+            categoria_id=categoria_id
+        )
+    
+    categorias = Categoria.objects.filter(
+        empresa=empresa,
+        activo=True
+    )
 
     if request.method == "POST":
 
@@ -232,6 +257,10 @@ def agregar_producto_pedido(request, pedido_id):
             "pedido": pedido,
             "form": form,
             "empresa": empresa,
+            "productos": productos,
+            "categorias": categorias,
+            "q": q,
+            "categoria_id": categoria_id,
         }
     )
     

@@ -43,6 +43,10 @@ class Producto(models.Model):
     stock_minimo = models.PositiveIntegerField(
         default=0
     )
+    
+    stock_reservado = models.PositiveIntegerField(
+        default=0
+    )
 
     activo = models.BooleanField(
         default=True
@@ -58,6 +62,10 @@ class Producto(models.Model):
 
     class Meta:
         ordering = ["nombre"]
+        
+    @property
+    def stock_disponible(self):
+        return self.stock - self.stock_reservado
         
     def clean(self):
       if self.categoria_id and self.empresa_id:

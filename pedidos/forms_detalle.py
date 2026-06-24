@@ -23,8 +23,17 @@ class DetallePedidoForm(forms.Form):
             Producto.objects.filter(
                 empresa=empresa,
                 activo=True
-            )
+            ).order_by("nombre")
         )
+
+        self.fields["producto"].widget.attrs.update({
+            "class": "form-select",
+            "id": "producto-select"
+        })
+
+        self.fields["cantidad"].widget.attrs.update({
+            "class": "form-control"
+        })
 
     def clean(self):
 
@@ -35,10 +44,10 @@ class DetallePedidoForm(forms.Form):
 
         if producto and cantidad:
 
-            if cantidad > producto.stock:
+            if cantidad > producto.stock_disponible:
 
                 raise forms.ValidationError(
-                    f"Stock insuficiente. Disponible: {producto.stock}"
+                    f"Stock insuficiente. Disponible: {producto.stock_disponible}"
                 )
 
         return cleaned_data

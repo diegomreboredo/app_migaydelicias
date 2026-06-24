@@ -206,16 +206,36 @@ Productos
                     ${{ producto.precio }}
                 </h4>
 
-                {% if producto.stock <= producto.stock_minimo %}
+                {% if producto.stock == 0 %}
 
                 <div class="alert alert-danger py-2 mt-3 mb-2">
-
+                
+                    <strong>
+                        ❌ Sin stock
+                    </strong>
+                
+                </div>
+                
+                {% elif producto.stock <= producto.stock_minimo %}
+                
+                <div class="alert alert-warning py-2 mt-3 mb-2">
+                
                     <strong>
                         ⚠ Stock crítico
                     </strong>
-
+                
                 </div>
-
+                
+                {% else %}
+                
+                <div class="alert alert-success py-2 mt-3 mb-2">
+                
+                    <strong>
+                        ✓ Disponible
+                    </strong>
+                
+                </div>
+                
                 {% endif %}
 
                 <div class="mt-3">
@@ -224,18 +244,24 @@ Productos
                         Stock:
                     </strong>
 
-                    {% if producto.stock <= producto.stock_minimo %}
+                    {% if producto.stock == 0 %}
 
                         <span class="badge bg-danger">
                             {{ producto.stock }}
                         </span>
-
+                    
+                    {% elif producto.stock <= producto.stock_minimo %}
+                    
+                        <span class="badge bg-warning text-dark">
+                            {{ producto.stock }}
+                        </span>
+                    
                     {% else %}
-
+                    
                         <span class="badge bg-success">
                             {{ producto.stock }}
                         </span>
-
+                    
                     {% endif %}
 
                 </div>

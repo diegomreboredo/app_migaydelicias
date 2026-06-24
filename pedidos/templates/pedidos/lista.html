@@ -81,6 +81,9 @@ Pedidos
         <h2 class="fw-bold mb-0">
             Pedidos
         </h2>
+        <small class="text-muted">
+    Seguimiento de pedidos en tiempo real
+</small>
 
         <small class="text-muted">
             Gestión de pedidos de {{ empresa.nombre }}
@@ -150,7 +153,7 @@ Pedidos
 
     <!-- PENDIENTES -->
 
-    <div class="col-lg-2">
+    <div class="col-xl">
 
         <div class="card border-0 shadow-sm h-100">
 
@@ -193,6 +196,26 @@ Pedidos
     <small class="text-muted d-block mt-1">
         {{ pedido.creado|date:"d/m/Y H:i" }}
     </small>
+    
+    {% if pedido.minutos_transcurridos < 30 %}
+
+    <span class="badge bg-success mt-2">
+        Hace {{ pedido.minutos_transcurridos }} min
+    </span>
+    
+    {% elif pedido.minutos_transcurridos < 60 %}
+    
+    <span class="badge bg-warning text-dark mt-2">
+        Hace {{ pedido.minutos_transcurridos }} min
+    </span>
+    
+    {% else %}
+    
+    <span class="badge bg-danger mt-2">
+        Hace {{ pedido.minutos_transcurridos }} min
+    </span>
+    
+    {% endif %}
 
     <div class="mt-3">
 
@@ -225,7 +248,7 @@ Pedidos
 
     <!-- PREPARACION -->
 
-    <div class="col-lg-2">
+    <div class="col-xl">
 
         <div class="card border-0 shadow-sm h-100">
 
@@ -268,6 +291,26 @@ Pedidos
     <small class="text-muted d-block mt-1">
         {{ pedido.creado|date:"d/m/Y H:i" }}
     </small>
+    
+    {% if pedido.minutos_transcurridos < 30 %}
+
+    <span class="badge bg-success mt-2">
+        Hace {{ pedido.minutos_transcurridos }} min
+    </span>
+    
+    {% elif pedido.minutos_transcurridos < 60 %}
+    
+    <span class="badge bg-warning text-dark mt-2">
+        Hace {{ pedido.minutos_transcurridos }} min
+    </span>
+    
+    {% else %}
+    
+    <span class="badge bg-danger mt-2">
+        Hace {{ pedido.minutos_transcurridos }} min
+    </span>
+    
+    {% endif %}
 
     <div class="mt-3">
 
@@ -300,7 +343,7 @@ Pedidos
 
     <!-- LISTOS -->
 
-    <div class="col-lg-2">
+    <div class="col-xl">
 
         <div class="card border-0 shadow-sm h-100">
 
@@ -343,6 +386,26 @@ Pedidos
     <small class="text-muted d-block mt-1">
         {{ pedido.creado|date:"d/m/Y H:i" }}
     </small>
+    
+    {% if pedido.minutos_transcurridos < 30 %}
+
+    <span class="badge bg-success mt-2">
+        Hace {{ pedido.minutos_transcurridos }} min
+    </span>
+    
+    {% elif pedido.minutos_transcurridos < 60 %}
+    
+    <span class="badge bg-warning text-dark mt-2">
+        Hace {{ pedido.minutos_transcurridos }} min
+    </span>
+    
+    {% else %}
+    
+    <span class="badge bg-danger mt-2">
+        Hace {{ pedido.minutos_transcurridos }} min
+    </span>
+    
+    {% endif %}
 
     <div class="mt-3">
 
@@ -375,7 +438,7 @@ Pedidos
 
     <!-- ENTREGADOS -->
 
-    <div class="col-lg-2">
+    <div class="col-xl">
 
         <div class="card border-0 shadow-sm h-100">
 
@@ -418,6 +481,10 @@ Pedidos
     <small class="text-muted d-block mt-1">
         {{ pedido.creado|date:"d/m/Y H:i" }}
     </small>
+    
+    <span class="badge bg-secondary mt-2">
+    Entregado
+    </span>
 
     <div class="mt-3">
 
@@ -448,8 +515,8 @@ Pedidos
 
     </div>
 
-</div>
-<div class="col-lg-2">
+
+<div class="col-xl">
 
     <div class="card border-0 shadow-sm h-100">
 
@@ -492,6 +559,9 @@ Pedidos
                         <small class="text-muted d-block mt-1">
                             {{ pedido.creado|date:"d/m/Y H:i" }}
                         </small>
+                        <span class="badge bg-danger mt-2">
+                      Cancelado
+                        </span>
 
                         <div class="mt-3">
 
@@ -520,6 +590,7 @@ Pedidos
 
     </div>
 
+</div>
 </div>
 
 {% endblock %}

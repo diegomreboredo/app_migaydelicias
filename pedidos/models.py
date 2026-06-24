@@ -6,6 +6,7 @@ from productos.models import Producto
 from django.db.models import Sum
 from inventario.models import MovimientoInventario
 from caja.models import MovimientoCaja
+from django.utils import timezone
 
 
 class Pedido(models.Model):
@@ -62,6 +63,15 @@ class Pedido(models.Model):
     actualizado = models.DateTimeField(
         auto_now=True
     )
+    
+    @property
+    def minutos_transcurridos(self):
+    
+        diferencia = timezone.now() - self.creado
+    
+        return int(
+            diferencia.total_seconds() / 60
+        )
     
     def clean(self):
       if self.cliente.empresa != self.empresa:

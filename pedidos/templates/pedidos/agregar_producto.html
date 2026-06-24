@@ -15,62 +15,206 @@ Agregar producto
 
 </a>
 
-{% if form.non_field_errors %}
 
-<div class="alert alert-danger">
+<div class="card border-0 shadow-sm">
 
-    {% for error in form.non_field_errors %}
+<div class="card-body p-4">
 
-        {{ error }}
 
-    {% endfor %}
+<h3 class="fw-bold">
+    Agregar producto
+</h3>
+
+<small class="text-muted">
+    Pedido #{{ pedido.id }} - {{ pedido.cliente.nombre }}
+</small>
+
+
+<hr>
+
+
+<form method="get" class="mb-4">
+
+<div class="row g-2">
+
+
+<div class="col-md-6">
+
+<input
+type="text"
+name="q"
+value="{{ q }}"
+class="form-control"
+placeholder="Buscar producto...">
 
 </div>
+
+
+<div class="col-md-4">
+
+<select
+name="categoria"
+class="form-select">
+
+
+<option value="">
+Todas las categorías
+</option>
+
+
+{% for categoria in categorias %}
+
+<option
+value="{{ categoria.id }}"
+{% if categoria_id == categoria.id|stringformat:"s" %}
+selected
+{% endif %}
+>
+
+{{ categoria.nombre }}
+
+</option>
+
+{% endfor %}
+
+
+</select>
+
+</div>
+
+
+<div class="col-md-2">
+
+<button
+class="btn btn-primary w-100">
+
+Buscar
+
+</button>
+
+</div>
+
+
+</div>
+
+</form>
+
+
+
+<div class="row g-3">
+
+
+{% for producto in productos %}
+
+
+<div class="col-md-4">
+
+
+<div class="card h-100 shadow-sm">
+
+
+<div class="card-body">
+
+
+<h5 class="fw-bold">
+{{ producto.nombre }}
+</h5>
+
+
+<small class="text-muted">
+{{ producto.categoria.nombre }}
+</small>
+
+
+<h5 class="text-success mt-2">
+${{ producto.precio }}
+</h5>
+
+
+<p>
+Stock:
+
+{% if producto.stock <= producto.stock_minimo %}
+
+<span class="badge bg-danger">
+{{ producto.stock }}
+</span>
+
+{% else %}
+
+<span class="badge bg-success">
+{{ producto.stock }}
+</span>
 
 {% endif %}
 
-<div class="card p-4">
+</p>
 
-    <h3 class="mb-4">
 
-        Agregar producto al Pedido #{{ pedido.id }}
 
-    </h3>
+<form method="post">
 
-    <form method="post">
+{% csrf_token %}
 
-        {% csrf_token %}
 
-        <div class="mb-3">
+<input
+type="hidden"
+name="producto"
+value="{{ producto.id }}">
 
-            <label class="form-label">
-                Producto
-            </label>
 
-            {{ form.producto }}
 
-        </div>
+<input
+type="number"
+name="cantidad"
+min="1"
+max="{{ producto.stock }}"
+value="1"
+class="form-control mb-2">
 
-        <div class="mb-3">
 
-            <label class="form-label">
-                Cantidad
-            </label>
+<button
+class="btn btn-primary w-100">
 
-            {{ form.cantidad }}
 
-        </div>
+<i class="bi bi-cart-plus"></i>
 
-        <button
-            type="submit"
-            class="btn btn-primary">
+Agregar
 
-            Agregar
 
-        </button>
+</button>
 
-    </form>
+
+</form>
+
 
 </div>
+
+</div>
+
+
+</div>
+
+
+{% empty %}
+
+
+<div class="alert alert-secondary">
+
+No hay productos encontrados.
+
+</div>
+
+
+{% endfor %}
+
+
+</div>
+
+
+</div>
+
+</div>
+
 
 {% endblock %}
