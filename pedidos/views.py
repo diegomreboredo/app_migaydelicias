@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from .forms_detalle import DetallePedidoForm
 from productos.models import Producto
 from categorias.models import Categoria
+from django.contrib import messages
 
 @login_required
 def lista_pedidos(request):
@@ -181,6 +182,26 @@ def cambiar_estado(request, pedido_id, nuevo_estado):
         empresa=empresa
     )
 
+    estado_anterior = pedido.estado
+
+    if (
+        nuevo_estado == "cancelado"
+        and estado_anterior != "cancelado"
+    ):
+
+        for detalle in pedido.detalles.all():
+
+            producto = detalle.producto
+
+            producto.stock_reservado -= detalle.cantidad
+
+            if producto.stock_reservado < 0:
+                producto.stock_reservado = 0
+
+            producto.save(
+                update_fields=["stock_reservado"]
+            )
+
     pedido.estado = nuevo_estado
 
     pedido.save()
@@ -233,11 +254,20 @@ def agregar_producto_pedido(request, pedido_id):
 
         if form.is_valid():
 
+            producto = form.cleaned_data["producto"]
+            cantidad = form.cleaned_data["cantidad"]
+            
             DetallePedido.objects.create(
                 pedido=pedido,
-                producto=form.cleaned_data["producto"],
-                cantidad=form.cleaned_data["cantidad"],
+                producto=producto,
+                cantidad=cantidad,
             )
+            print("RESERVANDO:", producto.nombre, cantidad)
+            producto.stock_reservado += cantidad
+            producto.save(
+                update_fields=["stock_reservado"]
+            )
+            print("RESERVADO:", producto.stock_reservado)
 
             return redirect(
                 "detalle_pedido",
@@ -276,6 +306,17 @@ def eliminar_detalle_pedido(request, detalle_id):
     )
 
     pedido = detalle.pedido
+    
+    producto = detalle.producto
+
+    producto.stock_reservado -= detalle.cantidad
+    
+    if producto.stock_reservado < 0:
+        producto.stock_reservado = 0
+    
+    producto.save(
+        update_fields=["stock_reservado"]
+    )
 
     detalle.delete()
 
@@ -306,10 +347,28 @@ def sumar_cantidad_detalle(request, detalle_id):
         pedido__empresa=empresa
     )
 
-    if detalle.cantidad < detalle.producto.stock:
+    if detalle.producto.stock_disponible > 0:
 
         detalle.cantidad += 1
+
+        detalle.producto.stock_reservado += 1
+        detalle.producto.save(
+            update_fields=["stock_reservado"]
+        )
+
         detalle.save()
+
+        messages.success(
+            request,
+            "Se agregó una unidad."
+        )
+
+    else:
+
+        messages.error(
+            request,
+            "No hay stock disponible para agregar otra unidad."
+        )
 
     return redirect(
         "detalle_pedido",
@@ -330,7 +389,26 @@ def restar_cantidad_detalle(request, detalle_id):
     if detalle.cantidad > 1:
 
         detalle.cantidad -= 1
+
+        if detalle.producto.stock_reservado > 0:
+            detalle.producto.stock_reservado -= 1
+            detalle.producto.save(
+                update_fields=["stock_reservado"]
+            )
+
         detalle.save()
+
+        messages.success(
+            request,
+            "Se quitó una unidad."
+        )
+
+    else:
+
+        messages.warning(
+            request,
+            "La cantidad mínima es 1."
+        )
 
     return redirect(
         "detalle_pedido",

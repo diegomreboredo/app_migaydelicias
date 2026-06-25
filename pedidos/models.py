@@ -116,10 +116,26 @@ class Pedido(models.Model):
           return
   
       for detalle in self.detalles.all():
-  
+
+          producto = detalle.producto
+      
+          producto.stock -= detalle.cantidad
+      
+          producto.stock_reservado -= detalle.cantidad
+      
+          if producto.stock_reservado < 0:
+              producto.stock_reservado = 0
+      
+          producto.save(
+              update_fields=[
+                  "stock",
+                  "stock_reservado"
+              ]
+          )
+      
           MovimientoInventario.objects.create(
               empresa=self.empresa,
-              producto=detalle.producto,
+              producto=producto,
               tipo="venta",
               cantidad=detalle.cantidad,
               motivo="Salida por venta",
