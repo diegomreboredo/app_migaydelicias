@@ -108,10 +108,23 @@ Editar Producto
             <div class="mb-3">
 
                 <label class="form-label">
-                    Imagen
-                </label>
+    Imagen
+</label>
 
-                {{ form.imagen }}
+{% if producto.imagen %}
+
+<div class="mb-3">
+
+    <img
+        src="{{ producto.imagen.url }}"
+        class="img-fluid rounded shadow-sm"
+        style="max-height:220px;">
+
+</div>
+
+{% endif %}
+
+{{ form.imagen }}
 
             </div>
 

@@ -22,6 +22,7 @@ class ProductoForm(forms.ModelForm):
             "nombre",
             "descripcion",
             "precio",
+            "imagen",
             "stock_minimo",
             "activo",
         ]
@@ -42,6 +43,11 @@ class ProductoForm(forms.ModelForm):
             ),
 
             "precio": forms.NumberInput(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+            "imagen": forms.ClearableFileInput(
                 attrs={
                     "class": "form-control"
                 }

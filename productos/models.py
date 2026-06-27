@@ -2,6 +2,9 @@ from django.db import models
 from empresas.models import Empresa
 from categorias.models import Categoria
 from django.core.exceptions import ValidationError
+from io import BytesIO
+from PIL import Image
+from django.core.files.base import ContentFile
 
 class Producto(models.Model):
     empresa = models.ForeignKey(
@@ -73,6 +76,38 @@ class Producto(models.Model):
               raise ValidationError(
                   "La categoría debe pertenecer a la misma empresa que el producto."
               )
+              
+    def save(self, *args, **kwargs):
+
+      if self.imagen:
+  
+          img = Image.open(self.imagen)
+  
+          if img.mode != "RGB":
+              img = img.convert("RGB")
+  
+          img.thumbnail((800, 800))
+  
+          output = BytesIO()
+  
+          img.save(
+              output,
+              format="JPEG",
+              quality=85,
+              optimize=True
+          )
+  
+          output.seek(0)
+  
+          nombre = self.imagen.name.rsplit(".", 1)[0] + ".jpg"
+  
+          self.imagen.save(
+              nombre,
+              ContentFile(output.read()),
+              save=False
+          )
+
+      super().save(*args, **kwargs)
 
     def __str__(self):
       return f"{self.nombre} ({self.empresa.nombre})"

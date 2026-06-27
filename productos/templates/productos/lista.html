@@ -140,7 +140,7 @@ Productos
 <div class="card border-0 shadow-sm mb-4">
 
     <div class="card-body">
-
+      
         <form method="get">
 
             <div class="input-group">
@@ -183,6 +183,21 @@ Productos
         <div class="card border-0 shadow-sm h-100">
 
             <div class="card-body">
+              {% if producto.imagen %}
+
+<img
+    src="{{ producto.imagen.url }}"
+    class="card-img-top rounded mb-3"
+    style="height:180px; object-fit:cover;">
+
+{% else %}
+
+<img
+    src="/media/defaults/producto.png"
+    class="card-img-top rounded mb-3"
+    style="height:180px; object-fit:contain;">
+
+{% endif %}
 
                 <div class="d-flex justify-content-between align-items-start">
 

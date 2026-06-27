@@ -99,7 +99,8 @@ def nuevo_producto(request):
 
         form = ProductoForm(
             empresa,
-            request.POST
+            request.POST,
+            request.FILES
         )
 
         if form.is_valid():
