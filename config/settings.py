@@ -127,9 +127,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Ruta física donde Django recopilará todos los archivos estáticos para producción
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Carpetas donde Django busca tus archivos estáticos en desarrollo
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 LOGIN_URL = "/login/"
@@ -137,3 +143,4 @@ LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 
 LOGOUT_REDIRECT_URL = "/login/"
+
