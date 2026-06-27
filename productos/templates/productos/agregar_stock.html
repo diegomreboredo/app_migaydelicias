@@ -1,10 +1,8 @@
 {% extends "base.html" %}
 
 {% block title %}
-Agregar Stock
+Registrar ingreso
 {% endblock %}
-
-
 
 {% block content %}
 
@@ -19,21 +17,89 @@ Agregar Stock
 
 <div class="card border-0 shadow-sm">
 
-<div class="card border-0 shadow-sm">
-
     <div class="card-body p-4">
 
-        <h2 class="fw-bold mb-3">
+        <h2 class="fw-bold mb-0">
 
-            + Stock
+            Registrar ingreso de stock
 
         </h2>
 
-        <p class="text-muted">
+        <h4 class="fw-bold text-primary mt-2 mb-0">
+    {{ producto.nombre }}
+</h4>
 
-            {{ producto.nombre }}
+<small class="text-muted">
+    {{ producto.categoria.nombre }}
+</small>
 
-        </p>
+        <hr>
+
+        <div class="row g-3 mb-4">
+
+            <div class="col-md-4">
+
+                <div class="kpi-card text-center">
+
+                    <i class="bi bi-box-seam text-primary fs-3"></i>
+
+                    <small class="text-muted d-block">
+                        Stock físico
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+
+                        {{ producto.stock }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="kpi-card text-center">
+
+                    <i class="bi bi-lock text-warning fs-3"></i>
+
+                    <small class="text-muted d-block">
+                        Reservado
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+
+                        {{ producto.stock_reservado }}
+
+                    </h3>
+                    
+                    
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="kpi-card text-center">
+
+                    <i class="bi bi-check-circle text-success fs-3"></i>
+
+                    <small class="text-muted d-block">
+                        Disponible
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+
+                        {{ producto.stock_disponible }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
 
         <form method="post">
 
@@ -42,28 +108,45 @@ Agregar Stock
             <div class="mb-3">
 
                 <label class="form-label">
+
                     Cantidad
+
                 </label>
 
                 {{ form.cantidad }}
 
             </div>
 
-            <div class="mb-3">
+            <div class="mb-4">
 
                 <label class="form-label">
+
                     Motivo
+
                 </label>
 
                 {{ form.motivo }}
 
             </div>
+            <div class="mb-4">
+
+    <label class="form-label">
+
+        Observación
+
+    </label>
+
+    {{ form.observacion }}
+
+</div>
 
             <button
                 type="submit"
                 class="btn btn-success">
 
-                Agregar Stock
+                <i class="bi bi-plus-circle me-2"></i>
+
+                Registrar ingreso
 
             </button>
 
@@ -72,5 +155,39 @@ Agregar Stock
     </div>
 
 </div>
+
+<script>
+
+function mostrarObservacion(){
+
+    let motivo =
+        document.getElementById("id_motivo");
+
+    let observacion =
+        document.getElementById("id_observacion")
+            .closest(".mb-4");
+
+    if(motivo.value=="otro"){
+
+        observacion.style.display="block";
+
+    }else{
+
+        observacion.style.display="none";
+
+    }
+
+}
+
+document
+.getElementById("id_motivo")
+.addEventListener(
+    "change",
+    mostrarObservacion
+);
+
+mostrarObservacion();
+
+</script>
 
 {% endblock %}

@@ -119,16 +119,13 @@ class Pedido(models.Model):
 
           producto = detalle.producto
       
-          producto.stock -= detalle.cantidad
-      
           producto.stock_reservado -= detalle.cantidad
-      
+
           if producto.stock_reservado < 0:
               producto.stock_reservado = 0
-      
+          
           producto.save(
               update_fields=[
-                  "stock",
                   "stock_reservado"
               ]
           )

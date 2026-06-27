@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Ajuste de Stock
+Registrar egreso
 {% endblock %}
 
 {% block content %}
@@ -17,26 +17,91 @@ Ajuste de Stock
 
 <div class="card border-0 shadow-sm">
 
-    <div class="card-body">
+    <div class="card-body p-4">
 
-        <h2 class="fw-bold">
+        <h2 class="fw-bold mb-0">
 
-            Ajuste de Stock
+            Registrar egreso de stock
 
         </h2>
 
-        <p class="text-muted">
+        <h4 class="text-danger fw-bold mt-3 mb-1">
 
             {{ producto.nombre }}
 
-        </p>
+        </h4>
 
-        <p>
+        <small class="text-muted">
 
-            Stock actual:
-            <strong>{{ producto.stock }}</strong>
+            {{ producto.categoria.nombre }}
 
-        </p>
+        </small>
+
+        <hr>
+
+        <div class="row g-3 mb-4">
+
+            <div class="col-md-4">
+
+                <div class="kpi-card text-center">
+
+                    <i class="bi bi-box-seam text-primary fs-3"></i>
+
+                    <small class="text-muted d-block">
+                        Stock físico
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+
+                        {{ producto.stock }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="kpi-card text-center">
+
+                    <i class="bi bi-lock text-warning fs-3"></i>
+
+                    <small class="text-muted d-block">
+                        Reservado
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+
+                        {{ producto.stock_reservado }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="kpi-card text-center">
+
+                    <i class="bi bi-check-circle text-success fs-3"></i>
+
+                    <small class="text-muted d-block">
+                        Disponible
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+
+                        {{ producto.stock_disponible }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
 
         <form method="post">
 
@@ -45,28 +110,45 @@ Ajuste de Stock
             <div class="mb-3">
 
                 <label class="form-label">
+
                     Cantidad
+
                 </label>
 
                 {{ form.cantidad }}
 
             </div>
 
-            <div class="mb-3">
+            <div class="mb-4">
 
                 <label class="form-label">
+
                     Motivo
+
                 </label>
 
                 {{ form.motivo }}
 
             </div>
+            <div class="mb-4">
+
+    <label class="form-label">
+
+        Observación
+
+    </label>
+
+    {{ form.observacion }}
+
+</div>
 
             <button
                 type="submit"
                 class="btn btn-danger">
 
-                Descontar Stock
+                <i class="bi bi-dash-circle me-2"></i>
+
+                Registrar egreso
 
             </button>
 
@@ -75,5 +157,39 @@ Ajuste de Stock
     </div>
 
 </div>
+
+<script>
+
+function mostrarObservacion(){
+
+    let motivo =
+        document.getElementById("id_motivo");
+
+    let observacion =
+        document.getElementById("id_observacion")
+            .closest(".mb-4");
+
+    if(motivo.value === "otro"){
+
+        observacion.style.display="block";
+
+    }else{
+
+        observacion.style.display="none";
+
+    }
+
+}
+
+document
+.getElementById("id_motivo")
+.addEventListener(
+    "change",
+    mostrarObservacion
+);
+
+mostrarObservacion();
+
+</script>
 
 {% endblock %}

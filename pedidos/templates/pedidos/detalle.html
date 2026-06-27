@@ -122,7 +122,9 @@ Pedido #{{ pedido.id }}
                 <th>Cantidad</th>
                 <th>Precio</th>
                 <th>Subtotal</th>
-                <th>Acciones</th>
+                {% if pedido.estado != "entregado" and pedido.estado != "cancelado" %}
+<th class="text-center">Acciones</th>
+{% endif %}
 
             </tr>
 
@@ -188,6 +190,7 @@ Pedido #{{ pedido.id }}
                             <i class="bi bi-trash"></i>
 
                         </a>
+                        
 
                     {% endif %}
 

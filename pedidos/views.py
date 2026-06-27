@@ -8,6 +8,7 @@ from .forms_detalle import DetallePedidoForm
 from productos.models import Producto
 from categorias.models import Categoria
 from django.contrib import messages
+from django.db.models import Sum
 
 @login_required
 def lista_pedidos(request):
@@ -307,6 +308,18 @@ def eliminar_detalle_pedido(request, detalle_id):
 
     pedido = detalle.pedido
     
+    if pedido.estado in ("entregado", "cancelado"):
+
+      messages.error(
+          request,
+          "No se pueden eliminar productos de un pedido entregado o cancelado."
+      )
+
+      return redirect(
+          "detalle_pedido",
+          pedido_id=pedido.id
+      )
+    
     producto = detalle.producto
 
     producto.stock_reservado -= detalle.cantidad
@@ -320,12 +333,11 @@ def eliminar_detalle_pedido(request, detalle_id):
 
     detalle.delete()
 
-    total = sum(
-        d.subtotal
-        for d in pedido.detalles.all()
-    )
-
-    pedido.total = total
+    pedido.total = (
+    pedido.detalles.aggregate(
+        total=Sum("subtotal")
+    )["total"] or 0
+)
 
     pedido.save(
         update_fields=["total"]
