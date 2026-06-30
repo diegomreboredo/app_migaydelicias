@@ -29,6 +29,11 @@ path(
     "inventario/",
     include("inventario.urls")
 ),
+
+path(
+    "categorias/",
+    include("categorias.urls")
+),
 ]
 
 

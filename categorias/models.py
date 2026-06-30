@@ -12,7 +12,6 @@ class Categoria(models.Model):
 
     nombre = models.CharField(
         max_length=100,
-        unique=True
     )
 
     icono = models.CharField(
@@ -33,6 +32,13 @@ class Categoria(models.Model):
         ordering = ["orden", "nombre"]
         verbose_name = "Categoría"
         verbose_name_plural = "Categorías"
+        
+        constraints = [
+          models.UniqueConstraint(
+              fields=["empresa", "nombre"],
+              name="categoria_unica_por_empresa",
+          )
+]
 
     def __str__(self):
         return f"{self.nombre} ({self.empresa.nombre})"
