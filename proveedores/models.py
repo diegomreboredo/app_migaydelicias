@@ -26,6 +26,12 @@ class Proveedor(models.Model):
         blank=True,
         null=True
     )
+    
+    contacto = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
 
     telefono = models.CharField(
         max_length=30,
@@ -40,6 +46,18 @@ class Proveedor(models.Model):
 
     direccion = models.CharField(
         max_length=255,
+        blank=True,
+        null=True
+    )
+    
+    ciudad = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+    
+    provincia = models.CharField(
+        max_length=100,
         blank=True,
         null=True
     )

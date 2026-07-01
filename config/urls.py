@@ -34,6 +34,10 @@ path(
     "categorias/",
     include("categorias.urls")
 ),
+path(
+    "proveedores/",
+    include("proveedores.urls")
+),
 ]
 
 

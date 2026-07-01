@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+
+{% block title %}
+Proveedores
+{% endblock %}
+
+{% block content %}
+
+<a href="/"
+class="btn btn-outline-secondary mb-3">
+
+<i class="bi bi-arrow-left me-2"></i>
+
+Dashboard
+
+</a><div class="d-flex justify-content-between align-items-center mb-4"><div>
+
+    <h2 class="fw-bold mb-0">
+        Proveedores
+    </h2>
+
+    <small class="text-muted">
+        Gestión de proveedores de {{ empresa.nombre }}
+    </small>
+
+</div>
+
+<a href="{% url 'nuevo_proveedor' %}"
+   class="btn btn-primary">
+
+    <i class="bi bi-plus-circle me-2"></i>
+
+    Nuevo proveedor
+
+</a>
+
+</div><div class="row g-3 mb-4"><div class="col-lg-4">
+
+    <div class="kpi-card">
+
+        <i class="bi bi-truck text-primary fs-3"></i>
+
+        <small class="text-muted">
+            Total
+        </small>
+
+        <h2 class="fw-bold mt-2">
+
+            <a
+    href="/proveedores/"
+    class="text-decoration-none text-dark">
+
+    {{ total }}
+
+</a>
+
+        </h2>
+
+    </div>
+
+</div>
+
+<div class="col-lg-4">
+
+    <div class="kpi-card">
+
+        <i class="bi bi-check-circle text-success fs-3"></i>
+
+        <small class="text-muted">
+            Activos
+        </small>
+
+        <h2 class="fw-bold text-success mt-2">
+
+            <a
+    href="/proveedores/?filtro=activos"
+    class="text-decoration-none text-success">
+
+    {{ activos }}
+
+</a>
+
+        </h2>
+
+    </div>
+
+</div>
+
+<div class="col-lg-4">
+
+    <div class="kpi-card">
+
+        <i class="bi bi-pause-circle text-secondary fs-3"></i>
+
+        <small class="text-muted">
+            Inactivos
+        </small>
+
+        <h2 class="fw-bold text-secondary mt-2">
+
+            <a
+    href="/proveedores/?filtro=inactivos"
+    class="text-decoration-none text-secondary">
+
+    {{ inactivos }}
+
+</a>
+
+        </h2>
+
+    </div>
+
+</div>
+
+</div><div class="card border-0 shadow-sm mb-4"><div class="card-body">
+
+    <form method="get">
+
+        <div class="input-group">
+
+            <span class="input-group-text">
+
+                <i class="bi bi-search"></i>
+
+            </span>
+
+            <input
+                type="text"
+                name="q"
+                class="form-control"
+                placeholder="Buscar proveedor..."
+                value="{{ q|default:'' }}">
+
+            <button
+                class="btn btn-primary"
+                type="submit">
+
+                Buscar
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+</div>
+<div class="mt-3 d-flex gap-2 flex-wrap">
+
+    <a href="/proveedores/"
+       class="btn btn-outline-primary {% if not filtro %}active{% endif %}">
+        Todos
+    </a>
+
+    <a href="/proveedores/?filtro=activos"
+       class="btn btn-outline-success {% if filtro == 'activos' %}active{% endif %}">
+        Activos
+    </a>
+
+    <a href="/proveedores/?filtro=inactivos"
+       class="btn btn-outline-secondary {% if filtro == 'inactivos' %}active{% endif %}">
+        Inactivos
+    </a>
+
+</div><div class="card border-0 shadow-sm"><div class="table-responsive">
+
+    <table class="table align-middle mb-0">
+
+        <thead class="table-light">
+
+            <tr>
+
+                <th>Proveedor</th>
+
+                <th>CUIT</th>
+
+                <th>Teléfono</th>
+
+                <th>Email</th>
+
+                <th>Estado</th>
+
+                <th class="text-end">
+                    Acciones
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for proveedor in proveedores %}
+
+            <tr>
+
+                <td>
+
+                    <strong>
+
+                        {{ proveedor.nombre }}
+
+                    </strong>
+
+                </td>
+
+                <td>
+
+                    {{ proveedor.cuit|default:"—" }}
+
+                </td>
+
+                <td>
+
+                    {{ proveedor.telefono|default:"—" }}
+
+                </td>
+
+                <td>
+
+                    {{ proveedor.email|default:"—" }}
+
+                </td>
+
+                <td>
+
+                    <span
+    id="estado-{{ proveedor.id }}"
+    class="me-2 small fw-semibold">
+
+    {% if proveedor.activo %}
+        Activo
+    {% else %}
+        Inactivo
+    {% endif %}
+
+</span>
+
+<div class="form-check form-switch d-inline-block">
+
+    <input
+        class="form-check-input"
+        type="checkbox"
+        {% if proveedor.activo %}checked{% endif %}
+        onchange="toggleProveedor({{ proveedor.id }}, this)">
+
+</div>
+
+                </td>
+
+                <td class="text-end">
+
+                    <a href="{% url 'editar_proveedor' proveedor.id %}"
+                       class="btn btn-outline-primary btn-sm">
+
+                        <i class="bi bi-pencil"></i>
+
+                        Editar
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+        {% empty %}
+
+            <tr>
+
+                <td colspan="6"
+                    class="text-center text-muted">
+
+                    No hay proveedores registrados.
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+        
+        <script>
+function toggleProveedor(id, checkbox) {
+
+    fetch(`/proveedores/${id}/toggle/`)
+    .then(response => response.json())
+    .then(data => {
+
+        const estado = document.getElementById(`estado-${id}`);
+
+        estado.textContent = data.activo ? "Activo" : "Inactivo";
+
+        checkbox.checked = data.activo;
+
+    });
+
+}
+</script>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</div>{% endblock %}
