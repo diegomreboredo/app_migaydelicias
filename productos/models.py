@@ -91,15 +91,15 @@ class Producto(models.Model):
           output = BytesIO()
   
           img.save(
-              output,
-              format="JPEG",
-              quality=85,
-              optimize=True
-          )
+          output,
+          format="WEBP",
+          quality=85,
+          method=6
+      )
   
           output.seek(0)
   
-          nombre = self.imagen.name.rsplit(".", 1)[0] + ".jpg"
+          nombre = self.imagen.name.rsplit(".", 1)[0] + ".webp"
   
           self.imagen.save(
               nombre,
