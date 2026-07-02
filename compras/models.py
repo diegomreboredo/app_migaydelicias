@@ -70,11 +70,16 @@ class Compra(models.Model):
         
     def clean(self):
 
-      if self.proveedor.empresa != self.empresa:
+      if (
+          self.proveedor_id
+          and self.empresa_id
+      ):
   
-          raise ValidationError(
-              "El proveedor pertenece a otra empresa."
-          )
+          if self.proveedor.empresa != self.empresa:
+  
+              raise ValidationError(
+                  "El proveedor pertenece a otra empresa."
+              )
         
     def save(self, *args, **kwargs):
 
