@@ -107,33 +107,36 @@ def lista_pedidos(request):
 def nuevo_pedido(request):
 
     empresa = request.user.empresa_usuario.empresa
-    
+
     if request.method == "POST":
-    
+
         form = PedidoForm(
             empresa,
             request.POST
         )
-    
+
         if form.is_valid():
-    
+
             pedido = Pedido.objects.create(
-            empresa=empresa,
-            cliente=form.cleaned_data["cliente"],
-            observaciones=form.cleaned_data["observaciones"],
-        )
-        
-        return redirect(
-            "detalle_pedido",
-            pedido_id=pedido.id
-        )
-    
+                empresa=empresa,
+                cliente=form.cleaned_data["cliente"],
+                observaciones=form.cleaned_data["observaciones"],
+            )
+
+            return redirect(
+                "detalle_pedido",
+                pedido_id=pedido.id
+            )
+
     else:
-    
-        form = PedidoForm(
-            empresa
-        )
-    
+
+        cliente_id = request.GET.get("cliente")
+
+        form = PedidoForm(empresa)
+
+        if cliente_id:
+            form.initial["cliente"] = cliente_id
+
     return render(
         request,
         "pedidos/nuevo.html",

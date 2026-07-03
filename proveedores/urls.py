@@ -13,8 +13,8 @@ urlpatterns = [
 
     path(
         "nuevo/",
-        views.nuevo_proveedor,
-        name="nuevo_proveedor"
+        views.crear_proveedor,
+        name="crear_proveedor"
     ),
 
     path(

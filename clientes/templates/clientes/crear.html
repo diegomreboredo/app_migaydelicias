@@ -27,7 +27,8 @@ Nuevo Cliente
             Registrar un nuevo cliente para {{ empresa.nombre }}
         </small>
 
-        <form method="post">
+        <form method="post"
+      action="?next={{ request.GET.next }}&select={{ request.GET.select }}">
 
             {% csrf_token %}
 

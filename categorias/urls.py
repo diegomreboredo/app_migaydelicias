@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import views
 
+
+
 urlpatterns = [
 
     path(
@@ -11,9 +13,9 @@ urlpatterns = [
     ),
 
     path(
-        "nuevo/",
-        views.nueva_categoria,
-        name="nueva_categoria"
+        "crear/",
+        views.crear_categoria,
+        name="crear_categoria"
     ),
 
     path(

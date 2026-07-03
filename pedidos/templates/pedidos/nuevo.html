@@ -56,11 +56,25 @@ Nuevo Pedido
 
     <div class="mb-3">
 
-        <label class="form-label">
-            Cliente
-        </label>
+        <div class="d-flex justify-content-between align-items-center mb-2">
 
-        {{ form.cliente }}
+    <label class="form-label mb-0">
+
+        Cliente
+
+    </label>
+
+    <a href="{% url 'crear_cliente' %}?next={{ request.path }}&select=1"
+       class="btn btn-outline-primary btn-sm"
+       title="Nuevo cliente">
+
+        <i class="bi bi-plus-lg"></i>
+
+    </a>
+
+</div>
+
+{{ form.cliente }}
 
     </div>
 

@@ -51,9 +51,14 @@ def lista_categorias(request):
 
 
 @login_required
-def nueva_categoria(request):
+def crear_categoria(request):
 
     empresa = request.user.empresa_usuario.empresa
+    
+    print("=== CREAR CATEGORIA ===")
+    print("METHOD:", request.method)
+    print("GET next:", request.GET.get("next"))
+    print("GET select:", request.GET.get("select"))
 
     if request.method == "POST":
 
@@ -64,6 +69,18 @@ def nueva_categoria(request):
             categoria = form.save(commit=False)
             categoria.empresa = empresa
             categoria.save()
+            
+            next_url = request.GET.get("next")
+            select = request.GET.get("select")
+            
+            if next_url:
+                if select:
+                    sep = "&" if "?" in next_url else "?"
+                    return redirect(f"{next_url}{sep}categoria={categoria.id}")
+            
+                return redirect(next_url)
+            
+            return redirect("lista_categorias")
 
             messages.success(
                 request,

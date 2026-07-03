@@ -66,7 +66,7 @@ def lista_proveedores(request):
 
 
 @login_required
-def nuevo_proveedor(request):
+def crear_proveedor(request):
 
     empresa = request.user.empresa_usuario.empresa
 
@@ -77,10 +77,23 @@ def nuevo_proveedor(request):
         if form.is_valid():
 
             proveedor = form.save(commit=False)
-
             proveedor.empresa = empresa
-
             proveedor.save()
+
+            next_url = request.GET.get("next")
+            select = request.GET.get("select")
+
+            if next_url:
+
+                if select:
+
+                    sep = "&" if "?" in next_url else "?"
+
+                    return redirect(
+                        f"{next_url}{sep}proveedor={proveedor.id}"
+                    )
+
+                return redirect(next_url)
 
             return redirect("lista_proveedores")
 
@@ -88,14 +101,10 @@ def nuevo_proveedor(request):
 
         form = ProveedorForm()
 
-    return render(
-        request,
-        "proveedores/crear.html",
-        {
-            "empresa": empresa,
-            "form": form,
-        }
-    )
+    return render(request, "proveedores/crear.html", {
+        "form": form,
+        "empresa": empresa
+    })
 
 
 @login_required

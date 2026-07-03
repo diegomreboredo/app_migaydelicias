@@ -95,30 +95,33 @@ def nuevo_producto(request):
 
     empresa = request.user.empresa_usuario.empresa
 
-    if request.method == "POST":
+    categoria_id = request.GET.get("categoria")
+    
+    
 
-        form = ProductoForm(
-            empresa,
-            request.POST,
-            request.FILES
-        )
+    form = ProductoForm(
+        empresa,
+        request.POST or None,
+        request.FILES or None
+    )
+    print("CATEGORIA ID:", categoria_id)
+    print("INITIAL:", form.initial.get("categoria"))
+
+    form.fields["categoria"].queryset = empresa.categorias.filter(activo=True)
+
+    if request.method == "GET" and categoria_id:
+        form.initial["categoria"] = categoria_id
+
+    if request.method == "POST":
 
         if form.is_valid():
 
-            producto = form.save(
-                commit=False
-            )
-
+            producto = form.save(commit=False)
             producto.empresa = empresa
-
             producto.full_clean()
-
             producto.save()
 
-            stock_inicial = form.cleaned_data.get(
-                "stock_inicial",
-                0
-            )
+            stock_inicial = form.cleaned_data.get("stock_inicial", 0)
 
             if stock_inicial > 0:
 
@@ -130,24 +133,12 @@ def nuevo_producto(request):
                     motivo="Stock inicial"
                 )
 
-            return redirect(
-                "lista_productos"
-            )
+            return redirect("lista_productos")
 
-    else:
-
-        form = ProductoForm(
-            empresa
-        )
-
-    return render(
-        request,
-        "productos/crear.html",
-        {
-            "empresa": empresa,
-            "form": form,
-        }
-    )
+    return render(request, "productos/crear.html", {
+        "empresa": empresa,
+        "form": form,
+    })
     
 @login_required
 def editar_producto(request, producto_id):

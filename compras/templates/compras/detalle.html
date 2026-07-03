@@ -158,23 +158,25 @@ Detalle de compra
 
                 <hr>
 
-                <table class="table align-middle">
+                <div class="table-responsive">  <table class="table table-hover align-middle">
 
                     <thead>
 
-                        <tr>
+<tr>
 
-                            <th>Producto</th>
+    <th style="min-width:180px;">Producto</th>
 
-                            <th>Cantidad</th>
+    <th class="text-center">Cant.</th>
 
-                            <th>Precio</th>
+    <th class="text-end">Precio</th>
 
-                            <th>Subtotal</th>
+    <th class="text-end">Subtotal</th>
 
-                        </tr>
+    <th class="text-center" style="width:90px;">Acciones</th>
 
-                    </thead>
+</tr>
+
+</thead>
 
                     <tbody>
 
@@ -182,37 +184,51 @@ Detalle de compra
 
                         <tr>
 
-                            <td>
+    <td>
+        {{ detalle.producto.nombre }}
+    </td>
 
-                                {{ detalle.producto.nombre }}
+    <td class="text-center">
+        {{ detalle.cantidad }}
+    </td>
 
-                            </td>
+    <td class="text-end text-nowrap">
+        ${{ detalle.precio_unitario }}
+    </td>
 
-                            <td>
+    <td class="text-end text-nowrap fw-semibold">
+        ${{ detalle.subtotal }}
+    </td>
 
-                                {{ detalle.cantidad }}
+    <td class="text-center">
 
-                            </td>
+        {% if compra.estado == "pendiente" %}
 
-                            <td>
+        <a href="{% url 'editar_detalle_compra' detalle.id %}"
+           class="btn btn-sm btn-outline-warning btn-sm">
 
-                                $ {{ detalle.precio_unitario }}
+            <i class="bi bi-pencil"></i>
 
-                            </td>
+        </a>
 
-                            <td>
+        <a href="{% url 'eliminar_detalle_compra' detalle.id %}"
+           class="btn btn-sm btn-outline-danger btn-sm">
 
-                                $ {{ detalle.subtotal }}
+            <i class="bi bi-trash"></i>
 
-                            </td>
+        </a>
 
-                        </tr>
+        {% endif %}
+
+    </td>
+
+</tr>
 
                     {% empty %}
 
                         <tr>
 
-                            <td colspan="4"
+                            <td colspan="5"
                                 class="text-center text-muted">
 
                                 Todavía no hay productos.
@@ -226,6 +242,7 @@ Detalle de compra
                     </tbody>
 
                 </table>
+                </div>
 
                 <hr>
 
@@ -237,17 +254,33 @@ Detalle de compra
 
                     </h4>
 
-                    <h3 class="text-success fw-bold">
-
-                        $ {{ compra.total }}
-
-                    </h3>
+                    <h2 class="fw-bold text-success mb-0">
+    ${{ compra.total }}
+</h2>
 
                 </div>
 
-                <div class="text-end mt-4">
+                <div class="d-flex justify-content-end gap-2 flex-wrap mt-4">
 
-                    {% if compra.estado == "pendiente" %}
+{% if compra.estado == "pendiente" %}
+
+<a href="{% url 'editar_compra' compra.id %}"
+   class="btn btn-warning btn-sm">
+
+    <i class="bi bi-pencil me-2"></i>
+
+    Editar
+
+</a>
+
+<a href="{% url 'cancelar_compra' compra.id %}"
+   class="btn btn-danger btn-sm">
+
+    <i class="bi bi-x-circle me-2"></i>
+
+    Cancelar
+
+</a>
 
 <form method="post"
       action="{% url 'recibir_compra' compra.id %}">
@@ -256,11 +289,11 @@ Detalle de compra
 
     <button
         type="submit"
-        class="btn btn-success">
+        class="btn btn-success btn-sm">
 
         <i class="bi bi-check-circle me-2"></i>
 
-        Recibir compra
+        Recibir
 
     </button>
 
@@ -268,7 +301,7 @@ Detalle de compra
 
 {% endif %}
 
-                </div>
+</div>
 
             </div>
 

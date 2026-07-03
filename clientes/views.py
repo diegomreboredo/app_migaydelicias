@@ -89,6 +89,26 @@ def crear_cliente(request):
             cliente.empresa = empresa
 
             cliente.save()
+            
+            next_url = request.GET.get("next")
+            select = request.GET.get("select")
+            
+            if next_url:
+              print("NEXT:", next_url)
+              print("CLIENTE:", cliente.id)
+              print("SELECT:", select)
+
+              if select:
+          
+                  separador = "&" if "?" in next_url else "?"
+          
+                  return redirect(
+                      f"{next_url}{separador}cliente={cliente.id}"
+                  )
+          
+              return redirect(next_url)
+            
+            return redirect("lista_clientes")
 
         return redirect("lista_clientes")
 
