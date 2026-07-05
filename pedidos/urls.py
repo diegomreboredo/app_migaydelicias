@@ -46,5 +46,10 @@ path(
     views.restar_cantidad_detalle,
     name="restar_cantidad_detalle"
 ),
+path(
+    "detalle/<int:pedido_id>/pagar/",
+    views.marcar_pagado,
+    name="marcar_pagado",
+),
 
 ]

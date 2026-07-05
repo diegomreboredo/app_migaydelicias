@@ -80,6 +80,41 @@ Pedido #{{ pedido.id }}
     </div>
 
     <hr>
+    <div class="row mb-3">
+
+    <div class="col-md-6">
+
+        <strong>Estado del pedido:</strong><br>
+
+        {{ pedido.get_estado_display }}
+
+    </div>
+
+    <div class="col-md-6">
+
+        <strong>Estado de pago:</strong><br>
+
+        {% if pedido.estado_pago == "pagado" %}
+
+            <span class="badge bg-success">
+
+                Pagado
+
+            </span>
+
+        {% else %}
+
+            <span class="badge bg-warning text-dark">
+
+                Pendiente
+
+            </span>
+
+        {% endif %}
+
+    </div>
+
+</div>
 
     <h5>Cliente</h5>
 
@@ -277,6 +312,19 @@ Pedido #{{ pedido.id }}
         </a>
 
     {% endif %}
+    
+    {% if pedido.estado == "entregado" and pedido.estado_pago == "pendiente" %}
+
+<a href="{% url 'marcar_pagado' pedido.id %}"
+   class="btn btn-success">
+
+    <i class="bi bi-cash-coin me-2"></i>
+
+    Marcar como pagado
+
+</a>
+
+{% endif %}
     
     {% if pedido.estado != "entregado" and pedido.estado != "cancelado" %}
 

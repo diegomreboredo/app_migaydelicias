@@ -16,6 +16,8 @@ def lista_pedidos(request):
     empresa = request.user.empresa_usuario.empresa
 
     q = request.GET.get("q")
+    estado = request.GET.get("estado", "todos")
+    print("ESTADO:", estado)
 
     pendientes = Pedido.objects.filter(
         empresa=empresa,
@@ -63,6 +65,22 @@ def lista_pedidos(request):
         cancelados = cancelados.filter(
             cliente__nombre__icontains=q
         )
+    if estado != "todos":
+
+      if estado != "pendiente":
+          pendientes = pendientes.none()
+  
+      if estado != "preparacion":
+          preparacion = preparacion.none()
+  
+      if estado != "listo":
+          listos = listos.none()
+  
+      if estado != "entregado":
+          entregados = entregados.none()
+  
+      if estado != "cancelado":
+          cancelados = cancelados.none()
 
     pedidos_hoy = Pedido.objects.filter(
         empresa=empresa
@@ -80,6 +98,20 @@ def lista_pedidos(request):
         pedido.total
         for pedido in entregados
     )
+    
+    pedidos_filtrados = Pedido.objects.none()
+
+    if estado != "todos":
+    
+        pedidos_filtrados = Pedido.objects.filter(
+            empresa=empresa,
+            estado=estado
+        )
+    
+        if q:
+            pedidos_filtrados = pedidos_filtrados.filter(
+                cliente__nombre__icontains=q
+            )
 
     context = {
         "empresa": empresa,
@@ -88,6 +120,7 @@ def lista_pedidos(request):
         "listos": listos,
         "entregados": entregados,
         "cancelados": cancelados,
+        "pedidos_filtrados": pedidos_filtrados,
         "cancelados_total": cancelados_total,
         "pedidos_hoy": pedidos_hoy,
         "pendientes_total": pendientes_total,
@@ -95,6 +128,7 @@ def lista_pedidos(request):
         "listos_total": listos_total,
         "facturacion_total": facturacion_total,
         "q": q,
+        "estado": estado,
     }
 
     return render(
@@ -428,5 +462,52 @@ def restar_cantidad_detalle(request, detalle_id):
     return redirect(
         "detalle_pedido",
         pedido_id=detalle.pedido.id
+    )
+    
+@login_required
+def marcar_pagado(request, pedido_id):
+
+    empresa = request.user.empresa_usuario.empresa
+
+    pedido = get_object_or_404(
+        Pedido,
+        id=pedido_id,
+        empresa=empresa
+    )
+
+    if pedido.estado != "entregado":
+
+        messages.error(
+            request,
+            "Solo se pueden cobrar pedidos entregados."
+        )
+
+        return redirect(
+            "detalle_pedido",
+            pedido_id=pedido.id
+        )
+
+    if pedido.estado_pago == "pagado":
+
+        messages.warning(
+            request,
+            "Este pedido ya está pagado."
+        )
+
+        return redirect(
+            "detalle_pedido",
+            pedido_id=pedido.id
+        )
+
+    pedido.registrar_ingreso_caja()
+
+    messages.success(
+        request,
+        "Pago registrado correctamente."
+    )
+
+    return redirect(
+        "detalle_pedido",
+        pedido_id=pedido.id
     )
     

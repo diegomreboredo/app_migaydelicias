@@ -18,6 +18,11 @@ class Pedido(models.Model):
         ("entregado", "Entregado"),
         ("cancelado", "Cancelado"),
     ]
+    
+    ESTADOS_PAGO = [
+        ("pendiente", "Pendiente"),
+        ("pagado", "Pagado"),
+    ]
 
     empresa = models.ForeignKey(
         Empresa,
@@ -34,6 +39,12 @@ class Pedido(models.Model):
     estado = models.CharField(
         max_length=20,
         choices=ESTADOS,
+        default="pendiente"
+    )
+    
+    estado_pago = models.CharField(
+        max_length=20,
+        choices=ESTADOS_PAGO,
         default="pendiente"
     )
 
@@ -90,25 +101,35 @@ class Pedido(models.Model):
       )
       
     def save(self, *args, **kwargs):
-      
-          es_nuevo = self.pk is None
-      
-          estado_anterior = None
-      
-          if not es_nuevo:
-              estado_anterior = Pedido.objects.get(
-                  pk=self.pk
-              ).estado
-      
-          super().save(*args, **kwargs)
-      
-          if (
-              not es_nuevo
-              and estado_anterior != "entregado"
-              and self.estado == "entregado"
-              and not self.stock_descontado
-          ):
-              self.descontar_stock()
+
+      es_nuevo = self.pk is None
+  
+      estado_anterior = None
+      estado_pago_anterior = None
+  
+      if not es_nuevo:
+  
+          pedido_anterior = Pedido.objects.get(pk=self.pk)
+  
+          estado_anterior = pedido_anterior.estado
+          estado_pago_anterior = pedido_anterior.estado_pago
+  
+      super().save(*args, **kwargs)
+  
+      if (
+          not es_nuevo
+          and estado_anterior != "entregado"
+          and self.estado == "entregado"
+          and not self.stock_descontado
+      ):
+          self.descontar_stock()
+  
+      if (
+          not es_nuevo
+          and estado_pago_anterior != "pagado"
+          and self.estado_pago == "pagado"
+      ):
+          self.registrar_ingreso_caja()
     
     def descontar_stock(self):
 
@@ -145,14 +166,30 @@ class Pedido(models.Model):
           update_fields=["stock_descontado"]
       )
       
-      self.registrar_ingreso_caja()
+      
     
     def registrar_ingreso_caja(self):
 
-        if self.caja_registrada:
-            return
-    
-        MovimientoCaja.objects.create(
+      if self.caja_registrada:
+          return
+  
+      # Protección extra: si ya existe un movimiento para este pedido,
+      # no volver a crearlo aunque alguien modifique el admin.
+      if MovimientoCaja.objects.filter(
+          empresa=self.empresa,
+          referencia=f"Pedido #{self.id}",
+          tipo="ingreso"
+      ).exists():
+  
+          self.caja_registrada = True
+  
+          super(Pedido, self).save(
+              update_fields=["caja_registrada"]
+          )
+  
+          return
+  
+      MovimientoCaja.objects.create(
           empresa=self.empresa,
           tipo="ingreso",
           concepto="Venta de productos",
@@ -160,12 +197,12 @@ class Pedido(models.Model):
           monto=self.total,
           observaciones=f"Cliente: {self.cliente.nombre}"
       )
-    
-        self.caja_registrada = True
-    
-        self.save(
-            update_fields=["caja_registrada"]
-        )
+  
+      self.caja_registrada = True
+  
+      super(Pedido, self).save(
+          update_fields=["caja_registrada"]
+      )
         
 class DetallePedido(models.Model):
 
