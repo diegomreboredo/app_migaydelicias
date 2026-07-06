@@ -29,6 +29,58 @@ Reportes
     </a>
 
 </div>
+<ul class="nav nav-tabs mb-4" id="reportesTabs" role="tablist">
+
+    <li class="nav-item">
+        <button class="nav-link active"
+                data-bs-toggle="tab"
+                data-bs-target="#general"
+                type="button">
+            📊 General
+        </button>
+    </li>
+
+    <li class="nav-item">
+        <button class="nav-link"
+                data-bs-toggle="tab"
+                data-bs-target="#ventas"
+                type="button">
+            🛒 Ventas
+        </button>
+    </li>
+
+    <li class="nav-item">
+        <button class="nav-link"
+                data-bs-toggle="tab"
+                data-bs-target="#productos"
+                type="button">
+            📦 Productos
+        </button>
+    </li>
+
+    <li class="nav-item">
+        <button class="nav-link"
+                data-bs-toggle="tab"
+                data-bs-target="#clientes"
+                type="button">
+            👥 Clientes
+        </button>
+    </li>
+
+    <li class="nav-item">
+        <button class="nav-link"
+                data-bs-toggle="tab"
+                data-bs-target="#finanzas"
+                type="button">
+            💰 Finanzas
+        </button>
+    </li>
+
+</ul>
+
+<div class="tab-content">
+
+    <div class="tab-pane fade show active" id="general">
 
 <div class="row g-3">
 
@@ -240,10 +292,11 @@ Reportes
     </div>
 
 </div>
+</div>
 
+    <div class="tab-pane fade" id="ventas">
 
-
-<div class="row mt-4 g-3">
+        <div class="row mt-4 g-3">
 
     <div class="col-12 col-lg-8">
 
@@ -291,23 +344,23 @@ Reportes
 
 </div>
 
-<div class="row mt-4 g-3">
+    </div>
 
-    <!-- Top productos -->
+    <div class="tab-pane fade" id="productos">
 
-    <div class="col-12 col-lg-6">
+        <div class="row">
 
-        <div class="card border-0 shadow-sm h-100">
+    <div class="col-12">
+
+        <div class="card border-0 shadow-sm">
 
             <div class="card-body">
 
                 <h5 class="fw-bold mb-3">
-
                     📦 Top 10 productos
-
                 </h5>
 
-                <div style="height:400px">
+                <div class="chart-container">
 
                     <canvas id="productosChart"></canvas>
 
@@ -319,21 +372,25 @@ Reportes
 
     </div>
 
-    <!-- Top clientes -->
+</div>
 
-    <div class="col-12 col-lg-6">
+    </div>
 
-        <div class="card border-0 shadow-sm h-100">
+    <div class="tab-pane fade" id="clientes">
+
+        <div class="row">
+
+    <div class="col-12">
+
+        <div class="card border-0 shadow-sm">
 
             <div class="card-body">
 
                 <h5 class="fw-bold mb-3">
-
                     👤 Top clientes
-
                 </h5>
 
-                <div style="height:400px">
+                <div class="chart-container">
 
                     <canvas id="clientesChart"></canvas>
 
@@ -341,6 +398,18 @@ Reportes
 
             </div>
 
+        </div>
+
+    </div>
+
+</div>
+
+    </div>
+
+    <div class="tab-pane fade" id="finanzas">
+
+        <div class="alert alert-info mt-3">
+            Próximamente reportes financieros.
         </div>
 
     </div>
