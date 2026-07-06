@@ -241,23 +241,25 @@ Reportes
 
 </div>
 
-<hr class="my-5">
 
-<h4 class="fw-bold mb-3">
 
-    Próximamente
+<div class="row mt-4 g-3">
 
-</h4>
+    <div class="col-12 col-lg-8">
 
-<div class="row g-3">
-
-    <div class="col-md-6">
-
-        <div class="card border-0 shadow-sm">
+        <div class="card border-0 shadow-sm h-100">
 
             <div class="card-body">
 
-                📊 Gráfico de ventas de los últimos 30 días
+                <h5 class="fw-bold mb-3">
+                    📈 Ventas últimos 30 días
+                </h5>
+
+                <div style="height:350px">
+
+                    <canvas id="ventasChart"></canvas>
+
+                </div>
 
             </div>
 
@@ -265,41 +267,21 @@ Reportes
 
     </div>
 
-    <div class="col-md-6">
+    <div class="col-12 col-lg-4">
 
-        <div class="card border-0 shadow-sm">
-
-            <div class="card-body">
-
-                🥇 Top 10 productos más vendidos
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-md-6">
-
-        <div class="card border-0 shadow-sm">
+        <div class="card border-0 shadow-sm h-100">
 
             <div class="card-body">
 
-                👥 Top clientes
+                <h5 class="fw-bold mb-3">
+                    🥧 Formas de pago
+                </h5>
 
-            </div>
+                <div style="height:350px">
 
-        </div>
+                    <canvas id="pagosChart"></canvas>
 
-    </div>
-
-    <div class="col-md-6">
-
-        <div class="card border-0 shadow-sm">
-
-            <div class="card-body">
-
-                🥧 Distribución por forma de pago
+                </div>
 
             </div>
 
@@ -308,5 +290,294 @@ Reportes
     </div>
 
 </div>
+
+<div class="row mt-4 g-3">
+
+    <!-- Top productos -->
+
+    <div class="col-12 col-lg-6">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold mb-3">
+
+                    📦 Top 10 productos
+
+                </h5>
+
+                <div style="height:400px">
+
+                    <canvas id="productosChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Top clientes -->
+
+    <div class="col-12 col-lg-6">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold mb-3">
+
+                    👤 Top clientes
+
+                </h5>
+
+                <div style="height:400px">
+
+                    <canvas id="clientesChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+
+const ventas = JSON.parse('{{ ventas_30_dias_json|escapejs }}');
+
+const labels = ventas.map(v => v.dia);
+
+const datos = ventas.map(v => v.ventas);
+
+const ctx = document.getElementById("ventasChart");
+
+new Chart(ctx, {
+
+    type: "line",
+
+    data: {
+
+        labels: labels,
+
+        datasets: [{
+
+            label: "Ventas",
+
+            data: datos,
+
+            borderColor: "#0d6efd",
+
+            backgroundColor: "rgba(13,110,253,0.15)",
+
+            fill: true,
+
+            tension: 0.35,
+
+            borderWidth: 3,
+
+            pointRadius: 4,
+
+            pointHoverRadius: 6
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        interaction: {
+
+            mode: "index",
+
+            intersect: false
+
+        },
+
+        plugins: {
+
+            legend: {
+
+                display: false
+
+            },
+
+            tooltip: {
+
+                callbacks: {
+
+                    label: function(context) {
+
+                        return "$ " + context.raw.toLocaleString("es-AR");
+
+                    }
+
+                }
+
+            }
+
+        },
+
+        scales: {
+
+            y: {
+
+                beginAtZero: true,
+
+                ticks: {
+
+                    callback: function(value) {
+
+                        return "$ " + value.toLocaleString("es-AR");
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+const pagos = JSON.parse('{{ formas_pago_json|escapejs }}');
+
+const pagosCtx = document.getElementById("pagosChart");
+
+new Chart(pagosCtx, {
+
+    type: "pie",
+
+    data: {
+
+        labels: pagos.map(p => p.forma),
+
+        datasets: [{
+
+            data: pagos.map(p => p.monto),
+
+            backgroundColor: [
+
+                "#198754",
+
+                "#0dcaf0"
+
+            ]
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false
+
+    }
+    
+    
+
+});
+const productos = JSON.parse('{{ top_productos_json|escapejs }}');
+
+new Chart(document.getElementById("productosChart"), {
+
+    type: "bar",
+
+    data: {
+
+        labels: productos.map(p => p.producto__nombre),
+
+        datasets: [{
+
+            label: "Unidades vendidas",
+
+            data: productos.map(p => p.vendidos)
+
+        }]
+
+    },
+
+    options: {
+
+        indexAxis: "y",
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+
+                display: false
+
+            }
+
+        }
+
+    }
+
+});
+const clientes = JSON.parse('{{ top_clientes_json|escapejs }}');
+
+new Chart(document.getElementById("clientesChart"), {
+
+    type: "bar",
+
+    data: {
+
+        labels: clientes.map(c => c.cliente__nombre),
+
+        datasets: [{
+
+            label: "Total comprado",
+
+            data: clientes.map(c => c.total)
+
+        }]
+
+    },
+
+    options: {
+
+        indexAxis: "y",
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+
+                display: false
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
 
 {% endblock %}

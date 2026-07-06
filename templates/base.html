@@ -385,12 +385,13 @@
 
 </div>
 
-<script
-    src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}">
-</script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
 <script src="{% static 'js/main.js' %}"></script>
 
-</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+{% block scripts %}{% endblock %}
+
+</body>
 </html>
