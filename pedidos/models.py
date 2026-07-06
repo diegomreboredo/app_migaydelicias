@@ -23,6 +23,11 @@ class Pedido(models.Model):
         ("pendiente", "Pendiente"),
         ("pagado", "Pagado"),
     ]
+    
+    FORMAS_PAGO = [
+        ("efectivo", "Efectivo"),
+        ("transferencia", "Transferencia"),
+    ]
 
     empresa = models.ForeignKey(
         Empresa,
@@ -46,6 +51,12 @@ class Pedido(models.Model):
         max_length=20,
         choices=ESTADOS_PAGO,
         default="pendiente"
+    )
+    
+    forma_pago = models.CharField(
+        max_length=20,
+        choices=FORMAS_PAGO,
+        default="efectivo"
     )
 
     observaciones = models.TextField(
@@ -171,6 +182,9 @@ class Pedido(models.Model):
     def registrar_ingreso_caja(self):
 
       if self.caja_registrada:
+          return
+    
+      if self.forma_pago != "efectivo":
           return
   
       # Protección extra: si ya existe un movimiento para este pedido,

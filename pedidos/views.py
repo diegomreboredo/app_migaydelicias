@@ -9,6 +9,7 @@ from productos.models import Producto
 from categorias.models import Categoria
 from django.contrib import messages
 from django.db.models import Sum
+from .forms_pago import FormaPagoForm
 
 @login_required
 def lista_pedidos(request):
@@ -499,15 +500,41 @@ def marcar_pagado(request, pedido_id):
             pedido_id=pedido.id
         )
 
-    pedido.registrar_ingreso_caja()
+    if request.method == "POST":
 
-    messages.success(
+        form = FormaPagoForm(request.POST)
+
+        if form.is_valid():
+
+            pedido.forma_pago = form.cleaned_data["forma_pago"]
+            pedido.estado_pago = "pagado"
+            pedido.save(
+                update_fields=["forma_pago", "estado_pago"]
+            )
+
+            if pedido.forma_pago == "efectivo":
+                pedido.registrar_ingreso_caja()
+
+            messages.success(
+                request,
+                "Pago registrado correctamente."
+            )
+
+            return redirect(
+                "detalle_pedido",
+                pedido_id=pedido.id
+            )
+
+    else:
+
+        form = FormaPagoForm()
+
+    return render(
         request,
-        "Pago registrado correctamente."
-    )
-
-    return redirect(
-        "detalle_pedido",
-        pedido_id=pedido.id
+        "pedidos/marcar_pagado.html",
+        {
+            "pedido": pedido,
+            "form": form,
+        }
     )
     

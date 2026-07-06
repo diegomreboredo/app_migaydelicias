@@ -39,6 +39,7 @@ path(
     include("proveedores.urls")
 ),
 path("compras/", include("compras.urls")),
+path("caja/", include("caja.urls")),
 ]
 
 
