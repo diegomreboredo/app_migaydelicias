@@ -5,41 +5,183 @@ Editar Cliente
 {% endblock %}
 
 {% block content %}
-<a href="/clientes/"
-   class="btn btn-outline-secondary mb-3">
 
-    <i class="bi bi-arrow-left me-2"></i>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-    Volver a Clientes
+    <div>
 
-</a>
+        <a href="/clientes/" class="btn btn-outline-secondary btn-sm mb-3">
 
-<div class="card border-0 shadow-sm">
+            <i class="bi bi-arrow-left me-2"></i>
 
-    <div class="card-body">
+            Volver a Clientes
 
-        <h2 class="fw-bold mb-4">
-            Editar Cliente
+        </a>
+
+        <h2 class="fw-bold mb-1">
+
+            ✏️ Editar Cliente
+
         </h2>
 
-        <form method="post">
+        <small class="text-muted">
 
-            {% csrf_token %}
+            Modificar información de {{ cliente.nombre }}
 
-            {{ form.as_p }}
-
-            <button
-                type="submit"
-                class="btn btn-primary">
-
-                Guardar Cambios
-
-            </button>
-
-        </form>
+        </small>
 
     </div>
 
 </div>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    {% if form.errors %}
+
+    <div class="alert alert-danger">
+
+        {{ form.errors }}
+
+    </div>
+
+    {% endif %}
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-white">
+
+            <h5 class="fw-bold mb-0">
+
+                👤 Datos del cliente
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="mb-3">
+
+                <label class="form-label fw-semibold">
+
+                    Nombre
+
+                </label>
+
+                {{ form.nombre }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-white">
+
+            <h5 class="fw-bold mb-0">
+
+                📞 Información de contacto
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="mb-3">
+
+                <label class="form-label fw-semibold">
+
+                    Teléfono
+
+                </label>
+
+                {{ form.telefono }}
+
+            </div>
+
+            <div class="mb-0">
+
+                <label class="form-label fw-semibold">
+
+                    Dirección
+
+                </label>
+
+                {{ form.direccion }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-white">
+
+            <h5 class="fw-bold mb-0">
+
+                📝 Información adicional
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="mb-3">
+
+                <label class="form-label fw-semibold">
+
+                    Observaciones
+
+                </label>
+
+                {{ form.observaciones }}
+
+            </div>
+
+            <div class="form-check form-switch">
+
+                {{ form.activo }}
+
+                <label class="form-check-label">
+
+                    Cliente activo
+
+                </label>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+
+        <a href="/clientes/" class="btn btn-outline-secondary">
+
+            Cancelar
+
+        </a>
+
+        <button
+            type="submit"
+            class="btn btn-primary">
+
+            <i class="bi bi-check-circle me-2"></i>
+
+            Guardar cambios
+
+        </button>
+
+    </div>
+
+</form>
 
 {% endblock %}

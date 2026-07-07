@@ -18,4 +18,9 @@ path(
     views.eliminar_cliente,
     name="eliminar_cliente"
 ),
+path(
+    "<int:pk>/",
+    views.detalle_cliente,
+    name="detalle_cliente",
+),
 ]

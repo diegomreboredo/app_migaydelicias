@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ cliente.nombre }}
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <a href="{% url 'lista_clientes' %}" class="btn btn-outline-secondary btn-sm mb-3">
+
+            <i class="bi bi-arrow-left me-2"></i>
+
+            Clientes
+
+        </a>
+
+        <h2 class="fw-bold mb-1">
+
+            👤 {{ cliente.nombre }}
+
+        </h2>
+
+        <small class="text-muted">
+
+            Cliente desde {{ cliente.creado|date:"d/m/Y" }}
+
+        </small>
+
+    </div>
+
+    <div>
+
+        <a href="{% url 'editar_cliente' cliente.id %}"
+           class="btn btn-primary">
+
+            <i class="bi bi-pencil me-2"></i>
+
+            Editar
+
+        </a>
+
+    </div>
+
+</div>
+
+<div class="row g-4">
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold mb-4">
+
+                    Información
+
+                </h5>
+
+                <p>
+
+                    <i class="bi bi-telephone me-2 text-primary"></i>
+
+                    {{ cliente.telefono|default:"Sin teléfono" }}
+
+                </p>
+
+                <p>
+
+                    <i class="bi bi-geo-alt me-2 text-danger"></i>
+
+                    {{ cliente.direccion|default:"Sin dirección" }}
+
+                </p>
+
+                <p>
+
+                    <i class="bi bi-card-text me-2 text-success"></i>
+
+                    {{ cliente.observaciones|default:"Sin observaciones" }}
+
+                </p>
+
+                <hr>
+
+                {% if cliente.activo %}
+
+                    <span class="badge bg-success">
+
+                        Activo
+
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-secondary">
+
+                        Inactivo
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-8">
+
+        <div class="row g-3 mb-3">
+
+            <div class="col-md-4">
+
+                <div class="card border-0 shadow-sm">
+
+                    <div class="card-body text-center">
+
+                        <div class="fs-2">
+
+                            🛒
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            Pedidos
+
+                        </small>
+
+                        <h3 class="fw-bold">
+
+                            {{ cantidad_pedidos }}
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card border-0 shadow-sm">
+
+                    <div class="card-body text-center">
+
+                        <div class="fs-2">
+
+                            💰
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            Total comprado
+
+                        </small>
+
+                        <h3 class="fw-bold text-success">
+
+                            ${{ total_comprado }}
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card border-0 shadow-sm">
+
+                    <div class="card-body text-center">
+
+                        <div class="fs-2">
+
+                            📅
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            Última compra
+
+                        </small>
+
+                        <h6 class="fw-bold">
+
+                            {% if ultimo_pedido %}
+                                {{ ultimo_pedido.creado|date:"d/m/Y" }}
+                            {% else %}
+                                Sin compras
+                            {% endif %}
+
+                        </h6>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold mb-3">
+
+                    Historial de pedidos
+
+                </h5>
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+    <thead>
+
+        <tr>
+
+            <th># Pedido</th>
+
+            <th>Fecha</th>
+
+            <th>Total</th>
+
+            <th>Estado</th>
+
+            <th>Pago</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for pedido in pedidos %}
+
+        <tr>
+
+            <td>
+
+    <a href="{% url 'detalle_pedido' pedido.id %}"
+       class="fw-bold text-decoration-none">
+
+        #{{ pedido.id }}
+
+    </a>
+
+</td>
+
+            <td>
+
+                {{ pedido.creado|date:"d/m/Y H:i" }}
+
+            </td>
+
+            <td class="fw-semibold text-success">
+
+                ${{ pedido.total }}
+
+            </td>
+
+            <td>
+
+                {% if pedido.estado == "pendiente" %}
+
+                    <span class="badge bg-secondary">
+                        {{ pedido.get_estado_display }}
+                    </span>
+
+                {% elif pedido.estado == "preparacion" %}
+
+                    <span class="badge bg-warning text-dark">
+                        {{ pedido.get_estado_display }}
+                    </span>
+
+                {% elif pedido.estado == "listo" %}
+
+                    <span class="badge bg-info text-dark">
+                        {{ pedido.get_estado_display }}
+                    </span>
+
+                {% elif pedido.estado == "entregado" %}
+
+                    <span class="badge bg-success">
+                        {{ pedido.get_estado_display }}
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-danger">
+                        {{ pedido.get_estado_display }}
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                {% if pedido.estado_pago == "pagado" %}
+
+                    <span class="badge bg-success">
+
+                        Pagado
+
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-danger">
+
+                        Pendiente
+
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="5" class="text-center text-muted">
+
+                Este cliente todavía no tiene pedidos.
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

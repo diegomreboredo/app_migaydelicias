@@ -1,12 +1,51 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from .forms import ClienteForm
-
 from .models import Cliente
-
 from django.shortcuts import get_object_or_404
+from pedidos.models import Pedido
+
+@login_required
+def detalle_cliente(request, pk):
+
+    empresa = request.user.empresa_usuario.empresa
+
+    cliente = get_object_or_404(
+        Cliente,
+        pk=pk,
+        empresa=empresa
+    )
+
+    pedidos = (
+        Pedido.objects.filter(
+            empresa=empresa,
+            cliente=cliente
+        )
+        .order_by("-creado")
+    )
+
+    total_comprado = sum(
+        pedido.total for pedido in pedidos
+    )
+
+    cantidad_pedidos = pedidos.count()
+
+    ultimo_pedido = pedidos.first()
+
+    context = {
+        "cliente": cliente,
+        "pedidos": pedidos,
+        "total_comprado": total_comprado,
+        "cantidad_pedidos": cantidad_pedidos,
+        "ultimo_pedido": ultimo_pedido,
+    }
+
+    return render(
+        request,
+        "clientes/detalle.html",
+        context
+    )
 
 
 @login_required

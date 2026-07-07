@@ -5,34 +5,28 @@ Clientes
 {% endblock %}
 
 {% block content %}
-<a href="/"
-   class="btn btn-outline-secondary">
-
-    <i class="bi bi-arrow-left me-2"></i>
-
-    Dashboard
-
-</a>
-<br>
-
 <div class="d-flex justify-content-between align-items-center mb-4">
 
     <div>
 
-        <h2 class="fw-bold mb-0">
-            Clientes
+        <a href="/" class="btn btn-outline-secondary btn-sm mb-3">
+            <i class="bi bi-arrow-left me-2"></i>
+            Dashboard
+        </a>
+
+        <h2 class="fw-bold mb-1">
+            👥 Clientes
         </h2>
 
         <small class="text-muted">
-            Gestión de clientes
+            {{ clientes|length }} clientes registrados
         </small>
 
     </div>
 
-    <a href="{% url 'crear_cliente' %}"
-   class="btn btn-primary">
+    <a href="{% url 'crear_cliente' %}" class="btn btn-primary">
 
-        <i class="bi bi-plus-circle me-1"></i>
+        <i class="bi bi-plus-circle me-2"></i>
 
         Nuevo Cliente
 
@@ -40,23 +34,46 @@ Clientes
 
 </div>
 
-<div class="card border-0 shadow-sm">
+<div class="card border-0 shadow-sm mb-4">
 
     <div class="card-body">
 
-        <table class="table align-middle">
+        <div class="input-group">
 
-            <thead>
+            <span class="input-group-text bg-white border-end-0">
+
+                <i class="bi bi-search"></i>
+
+            </span>
+
+            <input
+                type="text"
+                class="form-control border-start-0"
+                placeholder="Buscar cliente...">
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card border-0 shadow-sm">
+
+    <div class="table-responsive">
+
+        <table class="table align-middle mb-0">
+
+            <thead class="table-light">
 
                 <tr>
 
-                    <th>Nombre</th>
+                    <th>Cliente</th>
 
-                    <th>Teléfono</th>
+                    <th>Contacto</th>
 
-                    <th>Dirección</th>
+                    <th>Estado</th>
 
-                    <th></th>
+                    <th class="text-end">Acciones</th>
 
                 </tr>
 
@@ -69,33 +86,96 @@ Clientes
                 <tr>
 
                     <td>
-                        {{ cliente.nombre }}
+
+                        <div class="d-flex align-items-center">
+
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3"
+                                 style="width:45px;height:45px;">
+
+                                <i class="bi bi-person-fill"></i>
+
+                            </div>
+
+                            <div>
+
+                                <div class="fw-semibold">
+
+                                    {{ cliente.nombre }}
+
+                                </div>
+
+                                <small class="text-muted">
+
+                                    Cliente desde {{ cliente.creado|date:"d/m/Y" }}
+
+                                </small>
+
+                            </div>
+
+                        </div>
+
                     </td>
 
                     <td>
-                        {{ cliente.telefono }}
+
+                        <div>
+
+                            <i class="bi bi-telephone me-2 text-muted"></i>
+
+                            {{ cliente.telefono|default:"Sin teléfono" }}
+
+                        </div>
+
+                        <div class="small text-muted mt-1">
+
+                            <i class="bi bi-geo-alt me-2"></i>
+
+                            {{ cliente.direccion|default:"Sin dirección" }}
+
+                        </div>
+
                     </td>
 
                     <td>
-                        {{ cliente.direccion }}
+
+                        {% if cliente.activo %}
+
+                            <span class="badge bg-success">
+                                Activo
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary">
+                                Inactivo
+                            </span>
+
+                        {% endif %}
+
                     </td>
 
-                    <td>
+                    <td class="text-end">
 
-                        <a
-    href="{% url 'editar_cliente' cliente.id %}"
-    class="btn btn-sm btn-outline-primary">
+                        <a href="{% url 'detalle_cliente' cliente.id %}"
+   class="btn btn-outline-secondary btn-sm">
 
-    Editar
+    <i class="bi bi-eye"></i>
 
 </a>
-<a
-    href="{% url 'eliminar_cliente' cliente.id %}"
-    class="btn btn-sm btn-outline-danger">
 
-    Eliminar
+                        <a href="{% url 'editar_cliente' cliente.id %}"
+                           class="btn btn-outline-primary btn-sm">
 
-</a>
+                            <i class="bi bi-pencil"></i>
+
+                        </a>
+
+                        <a href="{% url 'eliminar_cliente' cliente.id %}"
+                           class="btn btn-outline-danger btn-sm">
+
+                            <i class="bi bi-trash"></i>
+
+                        </a>
 
                     </td>
 
@@ -105,10 +185,11 @@ Clientes
 
                 <tr>
 
-                    <td colspan="4"
-                        class="text-center text-muted">
+                    <td colspan="4" class="text-center py-5 text-muted">
 
-                        No hay clientes registrados
+                        <i class="bi bi-people fs-1 d-block mb-3"></i>
+
+                        No hay clientes registrados.
 
                     </td>
 
