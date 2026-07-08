@@ -34,6 +34,11 @@ class Pedido(models.Model):
         on_delete=models.CASCADE,
         related_name="pedidos"
     )
+    
+    numero = models.PositiveIntegerField(
+        default=0,
+        editable=False
+    )
 
     cliente = models.ForeignKey(
         Cliente,
@@ -114,7 +119,6 @@ class Pedido(models.Model):
     def save(self, *args, **kwargs):
 
       es_nuevo = self.pk is None
-  
       estado_anterior = None
       estado_pago_anterior = None
   
@@ -124,6 +128,7 @@ class Pedido(models.Model):
   
           estado_anterior = pedido_anterior.estado
           estado_pago_anterior = pedido_anterior.estado_pago
+          
   
       super().save(*args, **kwargs)
   

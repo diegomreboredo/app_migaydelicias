@@ -10,6 +10,7 @@ from categorias.models import Categoria
 from django.contrib import messages
 from django.db.models import Sum
 from .forms_pago import FormaPagoForm
+from django.db.models import Max
 
 @login_required
 def lista_pedidos(request):
@@ -140,6 +141,7 @@ def lista_pedidos(request):
 
 @login_required
 def nuevo_pedido(request):
+    print("ENTRÉ A NUEVO_PEDIDO")
 
     empresa = request.user.empresa_usuario.empresa
 
@@ -152,11 +154,26 @@ def nuevo_pedido(request):
 
         if form.is_valid():
 
-            pedido = Pedido.objects.create(
+            ultimo_numero = (
+                Pedido.objects.filter(
+                    empresa=empresa
+                ).aggregate(
+                    Max("numero")
+                )["numero__max"]
+            )
+            
+            pedido = Pedido(
                 empresa=empresa,
+                numero=(ultimo_numero or 0) + 1,
                 cliente=form.cleaned_data["cliente"],
                 observaciones=form.cleaned_data["observaciones"],
+                
             )
+            print("Último número:", ultimo_numero)
+            print("Número asignado:", pedido.numero)
+            
+            pedido.save()
+            print("DESPUÉS DE GUARDAR:", pedido.numero)
 
             return redirect(
                 "detalle_pedido",
