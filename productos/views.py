@@ -104,8 +104,6 @@ def nuevo_producto(request):
         request.POST or None,
         request.FILES or None
     )
-    print("CATEGORIA ID:", categoria_id)
-    print("INITIAL:", form.initial.get("categoria"))
 
     form.fields["categoria"].queryset = empresa.categorias.filter(activo=True)
 

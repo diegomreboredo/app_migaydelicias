@@ -19,7 +19,6 @@ def lista_pedidos(request):
 
     q = request.GET.get("q")
     estado = request.GET.get("estado", "todos")
-    print("ESTADO:", estado)
 
     pendientes = Pedido.objects.filter(
         empresa=empresa,
@@ -141,7 +140,6 @@ def lista_pedidos(request):
 
 @login_required
 def nuevo_pedido(request):
-    print("ENTRÉ A NUEVO_PEDIDO")
 
     empresa = request.user.empresa_usuario.empresa
 
@@ -169,11 +167,8 @@ def nuevo_pedido(request):
                 observaciones=form.cleaned_data["observaciones"],
                 
             )
-            print("Último número:", ultimo_numero)
-            print("Número asignado:", pedido.numero)
             
             pedido.save()
-            print("DESPUÉS DE GUARDAR:", pedido.numero)
 
             return redirect(
                 "detalle_pedido",
@@ -318,12 +313,10 @@ def agregar_producto_pedido(request, pedido_id):
                 producto=producto,
                 cantidad=cantidad,
             )
-            print("RESERVANDO:", producto.nombre, cantidad)
             producto.stock_reservado += cantidad
             producto.save(
                 update_fields=["stock_reservado"]
             )
-            print("RESERVADO:", producto.stock_reservado)
 
             return redirect(
                 "detalle_pedido",

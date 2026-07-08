@@ -111,7 +111,7 @@ class Pedido(models.Model):
 
     def __str__(self):
       return (
-          f"Pedido #{self.id} - "
+          f"Pedido #{self.numero} - "
           f"{self.empresa.nombre} - "
           f"{self.cliente.nombre}"
       )
@@ -173,20 +173,24 @@ class Pedido(models.Model):
               tipo="venta",
               cantidad=detalle.cantidad,
               motivo="Salida por venta",
-              referencia=f"Pedido #{self.id}",
+              referencia=f"Pedido #{self.numero}",
           )
   
-      self.stock_descontado = True
-  
-      self.save(
-          update_fields=["stock_descontado"]
+      Pedido.objects.filter(
+          pk=self.pk
+      ).update(
+          stock_descontado=True
       )
+      
+      self.stock_descontado = True
       
       
     
     def registrar_ingreso_caja(self):
+  
 
       if self.caja_registrada:
+    
           return
     
       if self.forma_pago != "efectivo":
@@ -196,7 +200,7 @@ class Pedido(models.Model):
       # no volver a crearlo aunque alguien modifique el admin.
       if MovimientoCaja.objects.filter(
           empresa=self.empresa,
-          referencia=f"Pedido #{self.id}",
+          referencia=f"Pedido #{self.numero}",
           tipo="ingreso"
       ).exists():
   
@@ -207,12 +211,11 @@ class Pedido(models.Model):
           )
   
           return
-  
       MovimientoCaja.objects.create(
           empresa=self.empresa,
           tipo="ingreso",
           concepto="Venta de productos",
-          referencia=f"Pedido #{self.id}",
+          referencia=f"Pedido #{self.numero}",
           monto=self.total,
           observaciones=f"Cliente: {self.cliente.nombre}"
       )

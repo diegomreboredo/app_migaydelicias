@@ -1,10 +1,10 @@
 from django.db import models
 from caja.models import MovimientoCaja
-
 from empresas.models import Empresa
 from proveedores.models import Proveedor
 from inventario.models import MovimientoInventario
 from django.core.exceptions import ValidationError
+from productos.models import Producto
 
 
 class Compra(models.Model):
@@ -19,6 +19,11 @@ class Compra(models.Model):
         Empresa,
         on_delete=models.CASCADE,
         related_name="compras"
+    )
+    
+    numero = models.PositiveIntegerField(
+        default=0,
+        editable=False
     )
 
     proveedor = models.ForeignKey(
@@ -63,7 +68,7 @@ class Compra(models.Model):
 
     def __str__(self):
         return (
-            f"Compra #{self.id} - "
+            f"Compra #{self.numero} - "
             f"{self.empresa.nombre} - "
             f"{self.proveedor.nombre}"
         )
@@ -84,6 +89,17 @@ class Compra(models.Model):
     def save(self, *args, **kwargs):
 
       es_nueva = self.pk is None
+      
+      if es_nueva:
+
+        ultima = Compra.objects.filter(
+            empresa=self.empresa
+        ).order_by("-numero").first()
+    
+        if ultima:
+            self.numero = ultima.numero + 1
+        else:
+            self.numero = 1
   
       estado_anterior = None
   
@@ -116,14 +132,14 @@ class Compra(models.Model):
                 tipo="compra",
                 cantidad=detalle.cantidad,
                 motivo="Ingreso por compra",
-                referencia=f"Compra #{self.id}",
+                referencia=f"Compra #{self.numero}",
             )
     
         MovimientoCaja.objects.create(
             empresa=self.empresa,
             tipo="egreso",
             concepto="Compra de mercadería",
-            referencia=f"Compra #{self.id}",
+            referencia=f"Compra #{self.numero}",
             monto=self.total,
             observaciones=(
                 f"Proveedor: "
@@ -131,13 +147,15 @@ class Compra(models.Model):
             )
         )
     
-        self.stock_ingresado = True
-    
-        self.save(
-            update_fields=["stock_ingresado"]
+        Compra.objects.filter(
+            pk=self.pk
+        ).update(
+            stock_ingresado=True
         )
         
-from productos.models import Producto
+        self.stock_ingresado = True
+        
+
 
 
 class DetalleCompra(models.Model):
