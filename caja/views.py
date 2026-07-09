@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import MovimientoCaja
 from .forms import MovimientoCajaForm
 from django.shortcuts import redirect
+from pedidos.models import Pedido
 
 
 @login_required
@@ -110,4 +111,53 @@ def nuevo_movimiento(request):
             "form": form,
             "empresa": empresa,
         }
+    )
+    
+@login_required
+def inicio_caja(request):
+
+    empresa = request.user.empresa_usuario.empresa
+
+    movimientos = MovimientoCaja.objects.filter(
+        empresa=empresa
+    )
+
+    ingresos = sum(
+        m.monto for m in movimientos
+        if m.tipo == "ingreso"
+    )
+
+    egresos = sum(
+        m.monto for m in movimientos
+        if m.tipo == "egreso"
+    )
+
+    saldo = ingresos - egresos
+    
+    ultimos_pedidos = (
+        Pedido.objects
+        .filter(empresa=empresa)
+        .order_by("-creado")[:5]
+    )
+    
+    pedidos_pendientes = (
+        Pedido.objects.filter(
+            empresa=empresa,
+            estado="pendiente"
+        ).count()
+    )
+
+    context = {
+        "empresa": empresa,
+        "saldo": saldo,
+        "ingresos": ingresos,
+        "egresos": egresos,
+        "ultimos_pedidos": ultimos_pedidos,
+        "pedidos_pendientes": pedidos_pendientes,
+    }
+
+    return render(
+        request,
+        "caja/inicio.html",
+        context
     )
