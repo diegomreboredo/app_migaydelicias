@@ -1,5 +1,4 @@
 from django import forms
-from .iconos import ICONOS_BOOTSTRAP
 from .models import Categoria
 
 
