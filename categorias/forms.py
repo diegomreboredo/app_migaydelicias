@@ -1,5 +1,5 @@
 from django import forms
-
+from .iconos import ICONOS_BOOTSTRAP
 from .models import Categoria
 
 
@@ -11,7 +11,6 @@ class CategoriaForm(forms.ModelForm):
 
         fields = [
             "nombre",
-            "icono",
             "orden",
             "activo",
         ]
@@ -21,13 +20,6 @@ class CategoriaForm(forms.ModelForm):
             "nombre": forms.TextInput(
                 attrs={
                     "class": "form-control"
-                }
-            ),
-
-            "icono": forms.TextInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Ej: bi-cup-hot"
                 }
             ),
 

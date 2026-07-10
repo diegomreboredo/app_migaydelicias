@@ -12,6 +12,7 @@ from django.db.models import Sum
 from .forms_pago import FormaPagoForm
 from django.db.models import Max
 
+
 @login_required
 def lista_pedidos(request):
 
@@ -545,6 +546,29 @@ def marcar_pagado(request, pedido_id):
         {
             "pedido": pedido,
             "form": form,
+        }
+    )
+    
+@login_required
+def pos(request):
+
+    empresa = request.user.empresa_usuario.empresa
+
+    categorias = Categoria.objects.filter(
+        empresa=empresa
+    ).order_by("nombre")
+    
+    productos = Producto.objects.filter(
+        empresa=empresa
+    ).order_by("categoria__nombre", "nombre")
+
+    return render(
+        request,
+        "pedidos/pos.html",
+        {
+            "empresa": empresa,
+            "categorias": categorias,
+            "productos": productos,
         }
     )
     

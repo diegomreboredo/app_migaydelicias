@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
 Nueva Categoría
@@ -7,91 +8,159 @@ Nueva Categoría
 {% block content %}
 
 <a href="{% url 'lista_categorias' %}"
-class="btn btn-outline-secondary mb-3">
+   class="btn btn-outline-secondary mb-3">
 
-<i class="bi bi-arrow-left me-2"></i>
+    <i class="bi bi-arrow-left me-2"></i>
 
-Volver a Categorías
+    Volver a Categorías
 
-</a><div class="card border-0 shadow-sm"><div class="card-body p-4">
+</a>
 
-    <h2 class="fw-bold mb-0">
-        Nueva Categoría
-    </h2>
+<div class="card border-0 shadow-sm">
 
-    <small class="text-muted d-block mb-4">
-        Crear categoría para {{ empresa.nombre }}
-    </small>
+    <div class="card-body p-4">
 
-    <form method="post"
-      action="?next={{ request.GET.next }}&select={{ request.GET.select }}">
+        <h2 class="fw-bold mb-0">
 
-        {% csrf_token %}
+            Nueva Categoría
 
-        {% if form.errors %}
+        </h2>
 
-        <div class="alert alert-danger">
+        <small class="text-muted d-block mb-4">
 
-            {{ form.errors }}
+            Crear categoría para {{ empresa.nombre }}
 
-        </div>
+        </small>
 
-        {% endif %}
+        <form method="post"
+              action="?next={{ request.GET.next }}&select={{ request.GET.select }}">
 
-        <div class="mb-3">
+            {% csrf_token %}
 
-            <label class="form-label">
-                Nombre
-            </label>
+            {% if form.errors %}
 
-            {{ form.nombre }}
+                <div class="alert alert-danger">
 
-        </div>
+                    {{ form.errors }}
 
-        <div class="mb-3">
+                </div>
 
-            <label class="form-label">
-                Ícono Bootstrap
-            </label>
+            {% endif %}
 
-            {{ form.icono }}
+            <div class="mb-3">
 
-        </div>
+                <label class="form-label">
 
-        <div class="mb-3">
+                    Nombre
 
-            <label class="form-label">
-                Orden
-            </label>
+                </label>
 
-            {{ form.orden }}
+                {{ form.nombre }}
 
-        </div>
+            </div>
 
-        <div class="form-check mb-4">
+            <div class="mb-4">
 
-            {{ form.activo }}
+    <label class="form-label fw-semibold">
 
-            <label class="form-check-label">
+        Elegí un icono
 
-                Categoría activa
+    </label>
 
-            </label>
+    <input
+        type="hidden"
+        name="icono"
+        id="id_icono"
+        value="🍽️">
 
-        </div>
+    <div
+        id="selector-emojis"
+        class="d-flex flex-wrap gap-2 mt-3">
 
-        <button
-            type="submit"
-            class="btn btn-primary">
+        {% for emoji in emojis %}
 
-            <i class="bi bi-check-circle me-2"></i>
+            <button
+                type="button"
+                class="btn btn-light border fs-3 emoji-btn"
+                data-emoji="{{ emoji }}">
 
-            Guardar Categoría
+                {{ emoji }}
 
-        </button>
+            </button>
 
-    </form>
+        {% endfor %}
+
+    </div>
 
 </div>
 
-</div>{% endblock %}
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Orden
+
+                </label>
+
+                {{ form.orden }}
+
+            </div>
+
+            <div class="form-check mb-4">
+
+                {{ form.activo }}
+
+                <label class="form-check-label">
+
+                    Categoría activa
+
+                </label>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-primary">
+
+                <i class="bi bi-check-circle me-2"></i>
+
+                Guardar Categoría
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+const botones = document.querySelectorAll(".emoji-btn");
+const input = document.getElementById("id_icono");
+
+botones.forEach(boton => {
+
+    boton.addEventListener("click", function(){
+
+        botones.forEach(b => {
+
+            b.classList.remove("btn-primary");
+            b.classList.remove("text-white");
+            b.classList.add("btn-light");
+
+        });
+
+        this.classList.remove("btn-light");
+        this.classList.add("btn-primary");
+        this.classList.add("text-white");
+
+        input.value = this.dataset.emoji;
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

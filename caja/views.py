@@ -5,6 +5,7 @@ from .models import MovimientoCaja
 from .forms import MovimientoCajaForm
 from django.shortcuts import redirect
 from pedidos.models import Pedido
+from django.utils import timezone
 
 
 @login_required
@@ -62,6 +63,8 @@ def lista_caja(request):
     )
 
     saldo = ingresos - egresos
+    saldo = round(saldo, 2)
+    
 
     context = {
         "empresa": empresa,
@@ -146,6 +149,18 @@ def inicio_caja(request):
             estado="pendiente"
         ).count()
     )
+    
+    ventas_hoy = Pedido.objects.filter(
+        empresa=empresa,
+        estado_pago="pagado",
+        creado__date=timezone.localdate()
+    ).count()
+    
+    pedidos_entregados_hoy = Pedido.objects.filter(
+        empresa=empresa,
+        estado="entregado",
+        creado__date=timezone.localdate()
+    ).count()
 
     context = {
         "empresa": empresa,
@@ -154,6 +169,8 @@ def inicio_caja(request):
         "egresos": egresos,
         "ultimos_pedidos": ultimos_pedidos,
         "pedidos_pendientes": pedidos_pendientes,
+        "ventas_hoy": ventas_hoy,
+        "pedidos_entregados_hoy": pedidos_entregados_hoy,
     }
 
     return render(

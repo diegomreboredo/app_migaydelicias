@@ -15,9 +15,10 @@ class Categoria(models.Model):
     )
 
     icono = models.CharField(
-        max_length=20,
+        max_length=4,
         blank=True,
-        null=True
+        null=True,
+        default="🍽️",
     )
 
     orden = models.PositiveIntegerField(

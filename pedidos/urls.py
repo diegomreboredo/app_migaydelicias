@@ -51,5 +51,10 @@ path(
     views.marcar_pagado,
     name="marcar_pagado",
 ),
+path(
+    "pos/",
+    views.pos,
+    name="pos",
+),
 
 ]

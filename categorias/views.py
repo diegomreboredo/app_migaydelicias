@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CategoriaForm
 from .models import Categoria
+from .emojis import EMOJIS_GASTRONOMIA
 
 
 @login_required
@@ -68,6 +69,7 @@ def crear_categoria(request):
 
             categoria = form.save(commit=False)
             categoria.empresa = empresa
+            categoria.icono = request.POST.get("icono", "🍽️")
             categoria.save()
             
             next_url = request.GET.get("next")
@@ -99,6 +101,7 @@ def crear_categoria(request):
         {
             "empresa": empresa,
             "form": form,
+            "emojis": EMOJIS_GASTRONOMIA,
         }
     )
 
@@ -123,6 +126,7 @@ def editar_categoria(request, categoria_id):
 
         if form.is_valid():
 
+            categoria.icono = request.POST.get("icono", categoria.icono)
             form.save()
 
             messages.success(
@@ -143,6 +147,7 @@ def editar_categoria(request, categoria_id):
             "empresa": empresa,
             "form": form,
             "categoria": categoria,
+            "emojis": EMOJIS_GASTRONOMIA,
         }
     )
 
