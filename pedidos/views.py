@@ -555,12 +555,15 @@ def pos(request):
     empresa = request.user.empresa_usuario.empresa
 
     categorias = Categoria.objects.filter(
-        empresa=empresa
-    ).order_by("nombre")
+        empresa=empresa,
+        activo=True,
+    ).order_by("orden", "nombre")
     
     productos = Producto.objects.filter(
-        empresa=empresa
-    ).order_by("categoria__nombre", "nombre")
+        empresa=empresa,
+        activo=True,
+        categoria__activo=True,
+    ).order_by("categoria__orden", "nombre")
 
     return render(
         request,

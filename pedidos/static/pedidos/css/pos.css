@@ -1,0 +1,55 @@
+.categoria-btn{
+
+    width:140px;
+    height:120px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:18px;
+
+    transition:.20s;
+
+}
+
+.categoria-btn .emoji{
+
+    font-size:2.4rem;
+    line-height:1;
+
+}
+
+.categoria-btn .titulo{
+
+    margin-top:10px;
+
+    font-weight:600;
+
+    font-size:.95rem;
+
+    max-width:110px;
+
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+
+}
+
+.categoria-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.categoria-btn.btn-primary{
+
+    transform:scale(1.05);
+
+    box-shadow:0 8px 18px rgba(0,0,0,.18);
+
+}
+body{
+    background:red !important;
+}
