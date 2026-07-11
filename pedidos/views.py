@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-
 from .forms import PedidoForm
 from .models import Pedido, DetallePedido
 from django.shortcuts import get_object_or_404
@@ -11,6 +10,9 @@ from django.contrib import messages
 from django.db.models import Sum
 from .forms_pago import FormaPagoForm
 from django.db.models import Max
+from clientes.models import Cliente
+from decimal import Decimal
+
 
 
 @login_required
@@ -564,6 +566,11 @@ def pos(request):
         activo=True,
         categoria__activo=True,
     ).order_by("categoria__orden", "nombre")
+    
+    clientes = Cliente.objects.filter(
+        empresa=empresa,
+        activo=True
+    ).order_by("nombre")
 
     return render(
         request,
@@ -572,6 +579,78 @@ def pos(request):
             "empresa": empresa,
             "categorias": categorias,
             "productos": productos,
+            "clientes": clientes,
         }
     )
+
+from django.http import JsonResponse
+
+import json
+
+
+@login_required
+def crear_pedido_pos(request):
+
+    if request.method != "POST":
+
+        return JsonResponse(
+            {"error": "Método no permitido"},
+            status=405
+        )
+
+    datos = json.loads(request.body)
+
+    empresa = request.user.empresa_usuario.empresa
     
+    if datos["cliente"]:
+
+        cliente = Cliente.objects.get(
+            id=datos["cliente"],
+            empresa=empresa
+        )
+    
+    else:
+    
+        cliente = Cliente.objects.get(
+            empresa=empresa,
+            nombre="Consumidor Final"
+        )
+    
+    pedido = Pedido.objects.create(
+        empresa=empresa,
+        cliente=cliente,
+        estado="pendiente",
+        estado_pago="pendiente",
+        forma_pago="efectivo",
+    )
+    
+    total = Decimal("0")
+    
+    for item in datos["productos"]:
+    
+        producto = Producto.objects.get(
+            id=item["id"],
+            empresa=empresa
+        )
+    
+        cantidad = int(item["cantidad"])
+    
+        DetallePedido.objects.create(
+            pedido=pedido,
+            producto=producto,
+            cantidad=cantidad,
+            precio_unitario=producto.precio
+        )
+    
+        producto.stock_reservado += cantidad
+        producto.save(update_fields=["stock_reservado"])
+    
+        total += producto.precio * cantidad
+    
+    pedido.total = total
+    pedido.save(update_fields=["total"])
+    
+    return JsonResponse({
+        "ok": True,
+        "pedido": pedido.numero
+    })

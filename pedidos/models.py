@@ -118,34 +118,48 @@ class Pedido(models.Model):
       
     def save(self, *args, **kwargs):
 
-      es_nuevo = self.pk is None
-      estado_anterior = None
-      estado_pago_anterior = None
-  
-      if not es_nuevo:
-  
-          pedido_anterior = Pedido.objects.get(pk=self.pk)
-  
-          estado_anterior = pedido_anterior.estado
-          estado_pago_anterior = pedido_anterior.estado_pago
-          
-  
-      super().save(*args, **kwargs)
-  
-      if (
-          not es_nuevo
-          and estado_anterior != "entregado"
-          and self.estado == "entregado"
-          and not self.stock_descontado
-      ):
-          self.descontar_stock()
-  
-      if (
-          not es_nuevo
-          and estado_pago_anterior != "pagado"
-          and self.estado_pago == "pagado"
-      ):
-          self.registrar_ingreso_caja()
+        es_nuevo = self.pk is None
+    
+        if es_nuevo and self.numero == 0:
+    
+            ultimo = Pedido.objects.filter(
+                empresa=self.empresa
+            ).order_by("-numero").first()
+    
+            if ultimo:
+    
+                self.numero = ultimo.numero + 1
+    
+            else:
+    
+                self.numero = 1
+    
+        estado_anterior = None
+        estado_pago_anterior = None
+    
+        if not es_nuevo:
+    
+            pedido_anterior = Pedido.objects.get(pk=self.pk)
+    
+            estado_anterior = pedido_anterior.estado
+            estado_pago_anterior = pedido_anterior.estado_pago
+    
+        super().save(*args, **kwargs)
+    
+        if (
+            not es_nuevo
+            and estado_anterior != "entregado"
+            and self.estado == "entregado"
+            and not self.stock_descontado
+        ):
+            self.descontar_stock()
+    
+        if (
+            not es_nuevo
+            and estado_pago_anterior != "pagado"
+            and self.estado_pago == "pagado"
+        ):
+            self.registrar_ingreso_caja()
     
     def descontar_stock(self):
 

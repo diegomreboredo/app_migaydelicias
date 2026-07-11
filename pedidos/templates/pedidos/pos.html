@@ -13,6 +13,17 @@ Nuevo Pedido
 {% endblock %}
 
 {% block content %}
+<form style="display:none;">
+
+    {% csrf_token %}
+
+</form>
+<div
+    id="notificaciones"
+    class="position-fixed top-0 end-0 p-3"
+    style="z-index: 1080;">
+
+</div>
 
 <div class="container-fluid">
 
@@ -24,21 +35,104 @@ Nuevo Pedido
 
 <div class="card border-0 shadow-sm mb-3">
 
-<div class="card-body">
+    <div class="card-body">
 
-<h3 class="fw-bold mb-1">
+        <div class="row align-items-center">
 
-🛒 Nuevo Pedido
+            <div class="col-lg-6">
 
-</h3>
+                <h3 class="fw-bold mb-1">
 
-<p class="text-muted mb-0">
+                    🛒 Nuevo Pedido
 
-{{ empresa.nombre }}
+                </h3>
 
-</p>
+                <p class="text-muted mb-0">
+
+                    {{ empresa.nombre }}
+
+                </p>
+
+            </div>
+
+            <div class="col-lg-6 mt-3 mt-lg-0">
+
+                <div class="border rounded p-3 bg-light">
+
+                    <h6 class="fw-bold mb-3">
+
+                        👤 Cliente
+
+                    </h6>
+
+                    <input
+                        type="text"
+                        class="form-control mb-2"
+                        id="buscar-cliente"
+                        placeholder="🔍 Buscar cliente...">
+                    <div
+    id="lista-clientes"
+    class="list-group mb-2"
+    style="display:none; max-height:220px; overflow-y:auto;">
+
+    {% for cliente in clientes %}
+
+    <button
+        type="button"
+        class="list-group-item list-group-item-action cliente-item"
+        data-id="{{ cliente.id }}"
+        data-nombre="{{ cliente.nombre }}">
+
+        👤 {{ cliente.nombre }}
+
+    </button>
+
+    {% endfor %}
 
 </div>
+
+                    <div class="d-grid gap-2">
+
+                        <button
+                            class="btn btn-outline-primary" id="consumidor-final">
+                            
+
+                            👤 Consumidor Final
+
+                        </button>
+
+                        <button
+                            class="btn btn-outline-success">
+
+                            ➕ Nuevo Cliente
+
+                        </button>
+
+                    </div>
+
+                    <hr>
+
+                    <small class="text-muted">
+
+    Cliente seleccionado
+
+</small>
+
+<div
+    class="fw-bold mt-1"
+    id="cliente-seleccionado">
+
+    👤 Consumidor Final
+
+</div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -125,7 +219,8 @@ Productos
 
 <div
 class="col-6 col-md-4 col-xl-3 producto-card"
-data-categoria="{{ producto.categoria.id }}">
+data-categoria="{{ producto.categoria.id }}"
+data-id="{{ producto.id }}">
 
 <div class="card h-100 border-0 shadow-sm">
 
@@ -155,9 +250,93 @@ data-categoria="{{ producto.categoria.id }}">
 
 <h5 class="text-success mt-2">
 
-${{ producto.precio }}
+    ${{ producto.precio }}
 
 </h5>
+
+{% if producto.stock_disponible == 0 %}
+
+<div class="alert alert-danger py-1 mt-2 mb-2">
+
+    ❌ Sin stock
+
+</div>
+
+{% elif producto.stock_disponible <= producto.stock_minimo %}
+
+<div class="alert alert-warning py-1 mt-2 mb-2">
+
+    ⚠ Stock bajo
+
+</div>
+
+{% else %}
+
+<div class="alert alert-success py-1 mt-2 mb-2">
+
+    ✓ Disponible
+
+</div>
+
+{% endif %}
+
+<div class="row text-center small mb-3">
+
+    <div class="col-4">
+
+        <small class="text-muted d-block">
+
+            📦
+
+        </small>
+
+        <strong>
+
+            {{ producto.stock }}
+
+        </strong>
+
+    </div>
+
+    <div class="col-4">
+
+        <small class="text-muted d-block">
+
+            🟡
+
+        </small>
+
+        <strong>
+
+            {{ producto.stock_reservado }}
+
+        </strong>
+
+    </div>
+
+    <div class="col-4">
+
+        <small class="text-muted d-block">
+
+            🟢
+
+        </small>
+
+        <strong>
+
+            <span
+class="stock-disponible"
+data-id="{{ producto.id }}">
+
+{{ producto.stock_disponible }}
+
+</span>
+
+        </strong>
+
+    </div>
+
+</div>
 
 <button
 class="btn btn-success w-100 mt-3 agregar-producto"
@@ -165,7 +344,8 @@ class="btn btn-success w-100 mt-3 agregar-producto"
 data-id="{{ producto.id }}"
 data-nombre="{{ producto.nombre }}"
 data-precio="{{ producto.precio }}"
-data-icono="{{ producto.categoria.icono }}">
+data-icono="{{ producto.categoria.icono }}"
+data-stock="{{ producto.stock_disponible }}">
 
 ➕ Agregar
 
@@ -228,11 +408,12 @@ data-icono="{{ producto.categoria.icono }}">
             </div>
 
             <button
-                class="btn btn-success btn-lg w-100 mt-4">
+    id="btn-finalizar"
+    class="btn btn-success btn-lg w-100 mt-4">
 
-                ✅ Finalizar Pedido
+    ✅ Finalizar Pedido
 
-            </button>
+</button>
 
         </div>
 
@@ -244,6 +425,25 @@ data-icono="{{ producto.categoria.icono }}">
 
 </div>
 <script>
+  function mostrarNotificacion(mensaje, tipo="warning"){
+
+    const contenedor = document.getElementById("notificaciones");
+
+    const alerta = document.createElement("div");
+
+    alerta.className = `alert alert-${tipo} shadow mb-2`;
+
+    alerta.innerHTML = mensaje;
+
+    contenedor.appendChild(alerta);
+
+    setTimeout(() => {
+
+        alerta.remove();
+
+    }, 2500);
+
+}
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -251,6 +451,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const productos = document.querySelectorAll(".producto-card");
 
     const carrito = {};
+    let clienteSeleccionado = null;
 
     const contenedorCarrito = document.getElementById("carrito");
     const total = document.getElementById("total");
@@ -265,11 +466,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if(boton.classList.contains("aumentar")){
 
-            carrito[boton.dataset.id].cantidad++;
+    const item = carrito[boton.dataset.id];
 
-            actualizarCarrito();
+    if(item.cantidad >= item.stock){
 
-        }
+        mostrarNotificacion(
+            "⚠ No hay más stock disponible.",
+            "warning"
+        );
+
+        return;
+
+    }
+
+    item.cantidad++;
+
+    actualizarCarrito();
+
+}
 
         if(boton.classList.contains("disminuir")){
 
@@ -337,12 +551,28 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.addEventListener("click", function(){
 
         const id = this.dataset.id;
+        const stockDisponible = parseInt(this.dataset.stock);
 
-        if (carrito[id]) {
+        const cantidadEnCarrito = carrito[id]
+            ? carrito[id].cantidad
+            : 0;
+
+        if(cantidadEnCarrito >= stockDisponible){
+
+            mostrarNotificacion(
+                "⚠ No hay más stock disponible.",
+                "warning"
+            );
+
+            return;
+
+        }
+
+        if(carrito[id]){
 
             carrito[id].cantidad++;
 
-        } else {
+        }else{
 
             carrito[id] = {
 
@@ -350,6 +580,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 nombre: this.dataset.nombre,
                 precio: parseFloat(this.dataset.precio),
                 icono: this.dataset.icono,
+                stock: stockDisponible,
                 cantidad: 1,
 
             };
@@ -468,11 +699,175 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.getElementById("cantidad-productos").innerHTML = texto;
         total.innerHTML="$"+totalGeneral.toLocaleString("es-AR");
+        document.querySelectorAll(".stock-disponible").forEach(stock => {
+
+    const id = stock.dataset.id;
+
+    const boton = document.querySelector(
+        '.agregar-producto[data-id="' + id + '"]'
+    );
+
+    const stockOriginal = parseInt(boton.dataset.stock);
+
+    const cantidadCarrito = carrito[id]
+        ? carrito[id].cantidad
+        : 0;
+
+    stock.innerHTML = stockOriginal - cantidadCarrito;
+
+});
         
 
     }
 
     actualizarCarrito();
+    // =============================
+// BUSCAR CLIENTES
+// =============================
+
+const buscadorCliente = document.getElementById("buscar-cliente");
+
+const listaClientes = document.getElementById("lista-clientes");
+
+buscadorCliente.addEventListener("keyup", function(){
+
+    const texto = this.value.toLowerCase();
+
+    if(texto.length === 0){
+
+        listaClientes.style.display = "none";
+
+        return;
+
+    }
+
+    listaClientes.style.display = "block";
+
+    document.querySelectorAll(".cliente-item").forEach(cliente=>{
+
+        if(cliente.dataset.nombre.toLowerCase().includes(texto)){
+
+            cliente.style.display = "";
+
+        }else{
+
+            cliente.style.display = "none";
+
+        }
+
+    });
+
+});
+// =============================
+// SELECCIONAR CLIENTE
+// =============================
+
+document.querySelectorAll(".cliente-item").forEach(cliente => {
+
+    cliente.addEventListener("click", function(){
+
+        buscadorCliente.value = this.dataset.nombre;
+
+        clienteSeleccionado = this.dataset.id;
+
+document.getElementById("cliente-seleccionado").innerHTML =
+    "👤 " + this.dataset.nombre;
+
+        listaClientes.style.display = "none";
+
+    });
+
+});
+
+document.getElementById("btn-finalizar").addEventListener("click", function(){
+
+    if(Object.keys(carrito).length === 0){
+
+        mostrarNotificacion(
+            "⚠ El carrito está vacío.",
+            "warning"
+        );
+
+        return;
+
+    }
+
+    const productos = [];
+
+    Object.values(carrito).forEach(item=>{
+
+        productos.push({
+
+            id: item.id,
+
+            cantidad: item.cantidad
+
+        });
+
+    });
+
+    fetch("/pedidos/crear-pos/",{
+
+        method:"POST",
+
+        headers:{
+
+            "Content-Type":"application/json",
+
+            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+
+        },
+
+        body:JSON.stringify({
+
+            cliente: clienteSeleccionado,
+
+            productos: productos
+
+        })
+
+    })
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+    if(data.ok){
+
+        mostrarNotificacion(
+
+            "✅ Pedido #" + data.pedido + " creado correctamente.",
+
+            "success"
+
+        );
+
+        // Vaciar carrito
+
+        Object.keys(carrito).forEach(id => {
+
+            delete carrito[id];
+
+        });
+
+        actualizarCarrito();
+        
+        // Volver a Consumidor Final
+
+        clienteSeleccionado = null;
+        
+        buscadorCliente.value = "";
+        
+        listaClientes.style.display = "none";
+        
+        document.getElementById("cliente-seleccionado").innerHTML =
+            "👤 Consumidor Final";
+
+    }
+
+});
+
+});
 
 });
 

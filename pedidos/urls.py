@@ -56,5 +56,10 @@ path(
     views.pos,
     name="pos",
 ),
+path(
+    "crear-pos/",
+    views.crear_pedido_pos,
+    name="crear_pedido_pos",
+),
 
 ]
