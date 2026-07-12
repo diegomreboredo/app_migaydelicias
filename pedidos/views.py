@@ -611,9 +611,26 @@ def crear_pedido_pos(request):
     
     else:
     
-        cliente = Cliente.objects.get(
+        cliente, creado = Cliente.objects.get_or_create(
+    
             empresa=empresa,
-            nombre="Consumidor Final"
+    
+            es_consumidor_final=True,
+    
+            defaults={
+    
+                "nombre": "Consumidor Final",
+    
+                "telefono": "",
+    
+                "direccion": "",
+    
+                "observaciones": "",
+    
+                "activo": True,
+    
+            }
+    
         )
     
     pedido = Pedido.objects.create(

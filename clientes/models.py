@@ -33,6 +33,10 @@ class Cliente(models.Model):
     activo = models.BooleanField(
         default=True
     )
+    
+    es_consumidor_final = models.BooleanField(
+        default=False
+    )
 
     creado = models.DateTimeField(
         auto_now_add=True
