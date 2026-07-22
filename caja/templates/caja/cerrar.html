@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4" style="max-width:600px;">
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <h3 class="mb-4 text-center">
+                🔒 Cierre de Caja
+            </h3>
+
+            <div class="text-center mb-4">
+
+                <div class="text-muted">
+                    <strong>Usuario:</strong>
+                    {{ request.user.username }}
+                </div>
+
+                <div class="text-muted">
+                    <strong>Apertura:</strong>
+                    {{ caja.fecha_apertura|date:"d/m/Y H:i" }}
+                </div>
+
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="fw-bold mb-0">
+
+                        <i class="bi bi-clipboard-data me-2"></i>
+
+                        Resumen de la jornada
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between mb-2">
+
+                        <span>Saldo inicial</span>
+
+                        <strong>${{ caja.saldo_inicial }}</strong>
+
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2">
+
+                        <span>Ingresos</span>
+
+                        <strong class="text-success">
+
+                            +${{ ingresos }}
+
+                        </strong>
+
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2">
+
+                        <span>Egresos</span>
+
+                        <strong class="text-danger">
+
+                            -${{ egresos }}
+
+                        </strong>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+
+                        <span class="fw-bold">
+
+                            Saldo esperado
+
+                        </span>
+
+                        <strong class="fs-4 text-primary">
+
+                            ${{ saldo_esperado }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+
+                        💵 Saldo contado
+
+                    </label>
+
+                    {{ form.saldo_contado }}
+
+{% if form.saldo_contado.errors %}
+
+<div class="text-danger small mt-1">
+
+    {{ form.saldo_contado.errors }}
+
+</div>
+
+{% endif %}
+
+                </div>
+
+                <div class="card border-0 bg-light mb-3">
+
+                    <div class="card-body text-center">
+
+                        <small class="text-muted">
+
+                            Diferencia
+
+                        </small>
+
+                        <h2 id="diferenciaCaja"
+                            class="fw-bold mb-0">
+
+                            $0,00
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+
+                        📝 Observaciones
+
+                    </label>
+
+                    {{ form.observaciones_cierre }}
+
+{% if form.observaciones_cierre.errors %}
+
+<div class="text-danger small mt-1">
+
+    {{ form.observaciones_cierre.errors }}
+
+</div>
+
+{% endif %}
+
+                </div>
+
+                <button class="btn btn-danger w-100">
+
+                    🔒 Cerrar Caja
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const contado = document.getElementById("id_saldo_contado");
+    const observaciones = document.getElementById("id_observaciones_cierre");
+    const formulario = document.querySelector("form");
+    const diferencia = document.getElementById("diferenciaCaja");
+
+    // Convierte correctamente el saldo esperado
+    const esperado = parseFloat(
+        "{{ saldo_esperado }}"
+            .replace(/\./g, "")
+            .replace(",", ".")
+    );
+
+    function calcular() {
+
+        let valor = parseFloat(contado.value);
+
+        if (contado.value.trim() === "" || isNaN(valor)) {
+
+            diferencia.innerHTML = "💵 Ingrese el dinero contado";
+            diferencia.className = "fw-bold text-secondary";
+
+            return null;
+        }
+
+        let resultado = valor - esperado;
+
+        if (resultado === 0) {
+
+            diferencia.innerHTML =
+                "🟢 Caja balanceada<br><small>Sin diferencias</small>";
+
+            diferencia.className = "fw-bold text-success";
+
+        } else if (resultado < 0) {
+
+            diferencia.innerHTML =
+                "🔴 Faltante de $" +
+                Math.abs(resultado).toLocaleString("es-AR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
+            diferencia.className = "fw-bold text-danger";
+
+        } else {
+
+            diferencia.innerHTML =
+                "🟡 Sobrante de $" +
+                resultado.toLocaleString("es-AR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
+            diferencia.className = "fw-bold text-warning";
+
+        }
+
+        return resultado;
+    }
+
+    calcular();
+
+    contado.addEventListener("input", calcular);
+
+    formulario.addEventListener("submit", function(e){
+
+        let resultado = calcular();
+
+        if (resultado !== null &&
+            resultado !== 0 &&
+            observaciones.value.trim() === "") {
+
+            e.preventDefault();
+
+            alert("Debe ingresar una observación cuando existe una diferencia en el arqueo.");
+
+            observaciones.focus();
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

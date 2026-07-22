@@ -6,15 +6,29 @@ Caja
 
 {% block content %}
 
+
 <div class="container-fluid">
+  <a href="/"
+   class="btn btn-outline-secondary me-3">
+
+    <i class="bi bi-arrow-left me-2"></i>
+
+    Dashboard
+
+</a>
+  
+  
 
     <!-- HEADER -->
 
    <div class="card border-0 shadow-sm mb-4">
+     
 
     <div class="card-body">
+      
 
         <div class="d-flex justify-content-between align-items-center flex-wrap">
+          
 
             <div>
 
@@ -36,11 +50,34 @@ Caja
 
             <div class="mt-3 mt-md-0">
 
-                <span class="badge rounded-pill bg-success px-4 py-3 fs-6 shadow-sm">
+    <div class="card border-success shadow-sm">
 
-                    🟢 Caja abierta
+        <div class="card-body py-2 px-3">
 
-                </span>
+            <div class="fw-bold text-success">
+                🟢 Caja abierta
+            </div>
+
+            <small class="text-muted d-block">
+                Apertura:
+                {{ caja_abierta.fecha_apertura|date:"H:i" }}
+            </small>
+
+            <small class="text-muted d-block">
+                Saldo inicial:
+                ${{ caja_abierta.saldo_inicial }}
+            </small>
+
+            <div class="mt-2">
+
+                <a href="{% url 'cerrar_caja' %}"
+                   class="btn btn-outline-danger btn-sm w-100">
+
+                    <i class="bi bi-lock-fill me-1"></i>
+
+                    Cerrar Caja
+
+                </a>
 
             </div>
 
@@ -50,109 +87,129 @@ Caja
 
 </div>
 
-
-
-    <!-- MÉTRICAS -->
-
-    <div class="row g-3 mb-4">
-
-        <div class="col-6 col-lg-3">
-
-    <div class="card border-0 shadow-sm h-100">
-
-        <div class="card-body text-center">
-
-            <i class="bi bi-wallet2 display-5 text-primary"></i>
-
-            <h2 class="fw-bold mt-2">
-
-                ${{ saldo|floatformat:2 }}
-
-            </h2>
-
-            <small class="text-muted">
-
-                Saldo actual
-
-            </small>
-
         </div>
 
     </div>
 
 </div>
 
-        <div class="col-6 col-lg-3">
+<div class="row g-3 mb-4">
 
-    <div class="card border-0 shadow-sm h-100">
-
-        <div class="card-body text-center">
-
-            <i class="bi bi-cash-coin display-5 text-success"></i>
-
-            <h2 class="fw-bold mt-2">
-
-                {{ ventas_hoy }}
-
-            </h2>
-
-            <small class="text-muted">
-
-                Ventas de hoy
-
-            </small>
-
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-safe2 display-5 text-primary"></i>
+                <h3 class="fw-bold mt-2">
+                    ${{ caja_abierta.saldo_inicial }}
+                </h3>
+                <small class="text-muted">
+                    Saldo inicial
+                </small>
+            </div>
         </div>
+    </div>
 
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-arrow-down-circle display-5 text-success"></i>
+                <h3 class="fw-bold mt-2">
+                    ${{ ingresos }}
+                </h3>
+                <small class="text-muted">
+                    Ingresos
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-arrow-up-circle display-5 text-danger"></i>
+                <h3 class="fw-bold mt-2">
+                    ${{ egresos }}
+                </h3>
+                <small class="text-muted">
+                    Egresos
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-wallet2 display-5 text-warning"></i>
+                <h3 class="fw-bold mt-2">
+    ${{ saldo_actual }}
+</h3>
+
+<small class="text-muted">
+    Saldo actual
+</small>
+            </div>
+        </div>
     </div>
 
 </div>
+<div class="card border-0 shadow-sm mb-4">
 
-        <div class="col-6 col-lg-3">
+    <div class="card-header bg-white">
 
-    <div class="card border-0 shadow-sm h-100">
+        <h5 class="fw-bold mb-0">
 
-        <div class="card-body text-center">
+            <i class="bi bi-clipboard-data me-2"></i>
 
-            <i class="bi bi-hourglass-split display-5 text-warning"></i>
+            Resumen de la Caja
 
-            <h2 class="fw-bold mt-2">
-
-                {{ pedidos_pendientes }}
-
-            </h2>
-
-            <small class="text-muted">
-
-                Pendientes
-
-            </small>
-
-        </div>
+        </h5>
 
     </div>
 
-</div>
+    <div class="card-body">
 
-        <div class="col-6 col-lg-3">
+        <div class="row text-center">
 
-    <div class="card border-0 shadow-sm h-100">
+            <div class="col-md-3">
 
-        <div class="card-body text-center">
+                <small class="text-muted">Saldo inicial</small>
 
-            <i class="bi bi-check-circle display-5 text-success"></i>
+                <h4 class="fw-bold">
+                    ${{ caja_abierta.saldo_inicial }}
+                </h4>
 
-            <h2 class="fw-bold mt-2">
+            </div>
 
-                {{ pedidos_entregados_hoy }}
+            <div class="col-md-3">
 
-            </h2>
+                <small class="text-muted">Ingresos</small>
 
-            <small class="text-muted">
+                <h4 class="fw-bold text-success">
+                    ${{ ingresos }}
+                </h4>
 
-                Entregados hoy
+            </div>
 
-            </small>
+            <div class="col-md-3">
+
+                <small class="text-muted">Egresos</small>
+
+                <h4 class="fw-bold text-danger">
+                    ${{ egresos }}
+                </h4>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <small class="text-muted">Saldo esperado</small>
+
+                <h4 class="fw-bold text-primary">
+                    ${{ saldo_esperado }}
+                </h4>
+
+            </div>
 
         </div>
 
@@ -199,6 +256,18 @@ Caja
                         NUEVO PEDIDO
 
                     </a>
+                    <div class="mt-3">
+
+    <a href="{% url 'nuevo_movimiento' %}"
+       class="btn btn-outline-success btn-lg px-4">
+
+        <i class="bi bi-cash-coin me-2"></i>
+
+        Nuevo movimiento
+
+    </a>
+
+</div>
 
                 </div>
 
@@ -206,7 +275,7 @@ Caja
 
         </div>
         
-  <!-- ÚLTIMOS PEDIDOS -->
+<!-- ACTIVIDAD RECIENTE -->
 
 <div class="col-lg-4">
 
@@ -216,9 +285,9 @@ Caja
 
             <h5 class="fw-bold mb-0">
 
-                <i class="bi bi-receipt me-2"></i>
+                <i class="bi bi-clock-history me-2"></i>
 
-                Últimos pedidos
+                Actividad reciente
 
             </h5>
 
@@ -226,49 +295,33 @@ Caja
 
         <div class="card-body p-2">
 
-            {% for pedido in ultimos_pedidos %}
+            {% for movimiento in actividad_reciente %}
 
-            <div class="card mb-3 border-0 shadow-sm">
+            <div class="card mb-2 border-0 shadow-sm">
 
-                <div class="card-body">
+                <div class="card-body py-2">
 
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between">
 
                         <strong>
 
-                            Pedido #{{ pedido.numero }}
+                            {{ movimiento.concepto }}
 
                         </strong>
 
-                        {% if pedido.estado == "pendiente" %}
-
-                            <span class="badge bg-warning text-dark">
-
-                                Pendiente
-
-                            </span>
-
-                        {% elif pedido.estado == "preparacion" %}
-
-                            <span class="badge bg-primary">
-
-                                Preparación
-
-                            </span>
-
-                        {% elif pedido.estado == "listo" %}
+                        {% if movimiento.tipo == "ingreso" %}
 
                             <span class="badge bg-success">
 
-                                Listo
+                                + ${{ movimiento.monto }}
 
                             </span>
 
                         {% else %}
 
-                            <span class="badge bg-secondary">
+                            <span class="badge bg-danger">
 
-                                {{ pedido.get_estado_display }}
+                                - ${{ movimiento.monto }}
 
                             </span>
 
@@ -276,31 +329,19 @@ Caja
 
                     </div>
 
-                    <div class="text-muted mt-2">
+                    <small class="text-muted">
 
-                        <i class="bi bi-person me-1"></i>
+                        {{ movimiento.referencia|default:"Sin referencia" }}
 
-                        {{ pedido.cliente.nombre }}
+                    </small>
 
-                    </div>
+                    <br>
 
-                    <div class="fw-bold fs-5 mt-2">
+                    <small class="text-muted">
 
-                        ${{ pedido.total }}
+                        {{ movimiento.creado|date:"d/m H:i" }}
 
-                    </div>
-
-                    <div class="d-grid mt-3">
-
-                        <a href="{% url 'detalle_pedido' pedido.id %}"
-
-                           class="btn btn-outline-primary btn-sm">
-
-                            Ver pedido
-
-                        </a>
-
-                    </div>
+                    </small>
 
                 </div>
 
@@ -310,11 +351,11 @@ Caja
 
             <div class="text-center py-5">
 
-                <i class="bi bi-check-circle display-5 text-success"></i>
+                <i class="bi bi-inbox display-5 text-secondary"></i>
 
-                <p class="text-muted mt-3 mb-0">
+                <p class="text-muted mt-3">
 
-                    No hay pedidos.
+                    Sin movimientos.
 
                 </p>
 
@@ -427,34 +468,34 @@ Caja
 
     <div class="col-6 col-md-3">
 
-        <a href="/"
-           class="text-decoration-none">
+    <a href="{% url 'historial_cajas' %}"
+       class="text-decoration-none">
 
-            <div class="card border-0 shadow-sm text-center h-100">
+        <div class="card border-0 shadow-sm text-center h-100">
 
-                <div class="card-body py-4">
+            <div class="card-body py-4">
 
-                    <i class="bi bi-speedometer2 display-5 text-dark"></i>
+                <i class="bi bi-clock-history display-5 text-secondary"></i>
 
-                    <h6 class="fw-bold mt-3">
+                <h6 class="fw-bold mt-3">
 
-                        Dashboard
+                    Historial
 
-                    </h6>
+                </h6>
 
-                    <small class="text-muted">
+                <small class="text-muted">
 
-                        Inicio ERP
+                    Aperturas y cierres
 
-                    </small>
-
-                </div>
+                </small>
 
             </div>
 
-        </a>
+        </div>
 
-    </div>
+    </a>
+
+</div>
 
 </div>
 

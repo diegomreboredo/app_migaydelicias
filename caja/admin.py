@@ -1,6 +1,9 @@
 from django.contrib import admin
 
 from .models import MovimientoCaja
+from .models import Caja
+
+admin.site.register(Caja)
 
 
 @admin.register(MovimientoCaja)

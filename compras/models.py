@@ -5,6 +5,8 @@ from proveedores.models import Proveedor
 from inventario.models import MovimientoInventario
 from django.core.exceptions import ValidationError
 from productos.models import Producto
+from caja.models import Caja
+
 
 
 class Compra(models.Model):
@@ -126,7 +128,7 @@ class Compra(models.Model):
     
         for detalle in self.detalles.all():
     
-            MovimientoInventario.objects.create(
+                        MovimientoInventario.objects.create(
                 empresa=self.empresa,
                 producto=detalle.producto,
                 tipo="compra",
@@ -134,9 +136,15 @@ class Compra(models.Model):
                 motivo="Ingreso por compra",
                 referencia=f"Compra #{self.numero}",
             )
-    
+
+        caja_abierta = Caja.objects.filter(
+            empresa=self.empresa,
+            abierta=True
+        ).first()
+
         MovimientoCaja.objects.create(
             empresa=self.empresa,
+            caja=caja_abierta,
             tipo="egreso",
             concepto="Compra de mercadería",
             referencia=f"Compra #{self.numero}",
@@ -146,13 +154,13 @@ class Compra(models.Model):
                 f"{self.proveedor.nombre}"
             )
         )
-    
+
         Compra.objects.filter(
             pk=self.pk
         ).update(
             stock_ingresado=True
         )
-        
+
         self.stock_ingresado = True
         
 

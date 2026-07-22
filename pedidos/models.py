@@ -7,6 +7,7 @@ from django.db.models import Sum
 from inventario.models import MovimientoInventario
 from caja.models import MovimientoCaja
 from django.utils import timezone
+from caja.models import Caja
 
 
 class Pedido(models.Model):
@@ -225,8 +226,14 @@ class Pedido(models.Model):
           )
   
           return
+        
+      caja_abierta = Caja.objects.filter(
+          empresa=self.empresa,
+          abierta=True
+      ).first() 
       MovimientoCaja.objects.create(
           empresa=self.empresa,
+          caja=caja_abierta,
           tipo="ingreso",
           concepto="Venta de productos",
           referencia=f"Pedido #{self.numero}",
