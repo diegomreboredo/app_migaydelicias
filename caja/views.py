@@ -247,6 +247,7 @@ def abrir_caja(request):
         {
             "form": form,
             "empresa": empresa,
+            "fecha_actual": timezone.now(),
         }
     )
     

@@ -40,6 +40,7 @@ path(
 ),
 path("compras/", include("compras.urls")),
 path("caja/", include("caja.urls")),
+path("cocina/", include("cocina.urls")),
 ]
 
 

@@ -1,24 +1,110 @@
 {% extends "base.html" %}
 
+{% block title %}
+Apertura de Caja
+{% endblock %}
+
 {% block content %}
 
-<div class="container mt-5" style="max-width:500px;">
+<div class="container mt-4" style="max-width:650px;">
 
-    <div class="card shadow">
+    <div class="card border-0 shadow-lg rounded-4">
 
-        <div class="card-body">
+        <div class="card-body p-4">
 
-            <h3 class="mb-4 text-center">
-                🟢 Apertura de Caja
-            </h3>
+            <div class="text-center mb-4">
+
+                <div style="font-size:55px;">🟢</div>
+
+                <h2 class="fw-bold mb-1">
+                    Apertura de Caja
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Inicie una nueva jornada de trabajo
+                </p>
+
+            </div>
+
+            <div class="alert alert-light border rounded-4">
+
+                <div class="row text-center">
+
+                    <div class="col-6">
+
+                        <small class="text-muted">
+                            Fecha
+                        </small>
+
+                        <div class="fw-bold">
+                            {{ fecha_actual|date:"d/m/Y" }}
+                        </div>
+
+                    </div>
+
+                    <div class="col-6">
+
+                        <small class="text-muted">
+                            Hora
+                        </small>
+
+                        <div class="fw-bold">
+                            {{ fecha_actual|date:"H:i" }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            
 
             <form method="post">
 
                 {% csrf_token %}
 
-                {{ form.as_p }}
+                <div class="mb-4">
+                  <div class="alert alert-info border-0 mb-4">
 
-                <button class="btn btn-success w-100">
+    <div class="d-flex">
+
+        <i class="bi bi-info-circle-fill me-3 fs-4"></i>
+
+        <div>
+
+            <strong>Antes de abrir la caja</strong>
+
+            <div class="small mt-1">
+
+                • Contá el efectivo disponible.<br>
+
+                • Ingresá el monto exacto con el que comienza la jornada.<br>
+
+                • Ese importe será la base para el arqueo al cierre.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+                    <label class="form-label fw-semibold">
+                        💵 Saldo inicial
+                    </label>
+
+                    {{ form.saldo_inicial }}
+
+                    <div class="form-text">
+                        Dinero disponible al comenzar la jornada.
+                    </div>
+
+                </div>
+
+                <button class="btn btn-success btn-lg w-100 rounded-3">
+
+                    <i class="bi bi-unlock me-2"></i>
 
                     Abrir Caja
 

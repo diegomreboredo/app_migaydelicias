@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}
+Cocina
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                👨‍🍳 Cocina
+
+            </h2>
+
+            <div class="text-muted">
+
+                Panel de preparación de pedidos
+
+            </div>
+
+        </div>
+
+        <div class="fs-5 fw-bold">
+
+            🕒 <span id="reloj"></span>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card border-warning shadow-sm">
+
+                <div class="card-header bg-warning text-dark fw-bold">
+
+                    🟡 Pendientes
+
+                </div>
+
+                <div class="card-body" id="pendientes">
+
+                    <div class="text-muted text-center py-5">
+
+                        Sin pedidos
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card border-primary shadow-sm">
+
+                <div class="card-header bg-primary text-white fw-bold">
+
+                    🟠 Preparando
+
+                </div>
+
+                <div class="card-body" id="preparando">
+
+                    <div class="text-muted text-center py-5">
+
+                        Sin pedidos
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card border-success shadow-sm">
+
+                <div class="card-header bg-success text-white fw-bold">
+
+                    🟢 Listos
+
+                </div>
+
+                <div class="card-body" id="listos">
+
+                    <div class="text-muted text-center py-5">
+
+                        Sin pedidos
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function actualizarReloj() {
+
+    const ahora = new Date();
+
+    document.getElementById("reloj").innerHTML =
+        ahora.toLocaleTimeString("es-AR");
+
+}
+
+setInterval(actualizarReloj,1000);
+
+actualizarReloj();
+
+</script>
+
+{% endblock %}

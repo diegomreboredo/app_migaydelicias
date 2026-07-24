@@ -48,7 +48,9 @@ INSTALLED_APPS = [
     'caja',
     'reportes',
     'dashboard',
-    'usuarios'
+    'usuarios',
+    'cocina',
+    
 ]
 
 MIDDLEWARE = [
