@@ -257,9 +257,15 @@ def cambiar_estado(request, pedido_id, nuevo_estado):
             )
 
     pedido.estado = nuevo_estado
-
     pedido.save()
-
+    
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        from django.http import JsonResponse
+    
+        return JsonResponse({
+            "ok": True
+        })
+    
     return redirect(
         "detalle_pedido",
         pedido_id=pedido.id
